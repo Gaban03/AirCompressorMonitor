@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://via.placeholder.com/1000x250.png?text=Monitoramento+de+Compressor+de+Ar" alt="Monitoramento de Compressor de Ar Banner" />
-</p>
-
 # 📡 Monitoramento de Compressor de Ar
 
 O **Monitoramento de Compressor de Ar** é uma plataforma desenvolvida como projeto integrador na **Faculdade de Tecnologia** e **Escola SENAI Antonio Adolpho Lobbe**.  
