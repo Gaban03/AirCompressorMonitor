@@ -49,7 +49,7 @@ O sistema foi projetado para atender:
 ### Tecnologias-Chave
 | Categoria          | Ferramentas                                    |
 |--------------------|------------------------------------------------|
-| **Linguagens**     | C++, Java (Spring), C# (Blazor)                 |
+| **Linguagens**     | C++, Java (Spring), C# (Blazor), Dart                 |
 | **Mobile**         | Flutter                                        |
 | **Automação IoT**  | Node-RED                                       |
 | **Front-End**  | Blazor Web                                       |
