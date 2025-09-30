@@ -5,13 +5,13 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-public class Falhas {
+public class Falha {
 
     @Id
     private Integer id;
     
     @NotBlank
-    private String nome;
+    private String descricao;
 
     
 }
