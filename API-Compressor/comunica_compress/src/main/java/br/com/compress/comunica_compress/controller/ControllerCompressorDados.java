@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class ControllerCompressorDados {
 
     @Autowired
-    ServiceCompressorDados serviceCompressor;
+    ServiceCompressorDados serviceCompressorDados;
 
     @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
     @ApiResponses(value = {
@@ -30,9 +30,8 @@ public class ControllerCompressorDados {
             @ApiResponse(responseCode = "400", description = "Erro ao inserir dados!")
     })
     @PostMapping("/dados")
-    public ResponseEntity<CompressorDados> enviarDadosSensores(@RequestBody CompressorDados compressor) {
-        CompressorDados salvo = serviceCompressor.salvar(compressor);
-        return ResponseEntity.ok(salvo);
+    public ResponseEntity<CompressorDados> enviarDadosSensores(@RequestBody CompressorDados compressorDados) {
+        return ResponseEntity.ok(serviceCompressorDados.salvar(compressorDados));
     }
 
     @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
@@ -42,7 +41,7 @@ public class ControllerCompressorDados {
     })
     @GetMapping("/dados/{idCompressor}")
     public ResponseEntity<CompressorDados> lerDadosSensores(@PathVariable Integer idCompressor) {
-        Optional<CompressorDados> dadosRecentes = serviceCompressor.buscarUltimaLeitura(idCompressor);
+        Optional<CompressorDados> dadosRecentes = serviceCompressorDados.buscarUltimaLeitura(idCompressor);
         return dadosRecentes.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }

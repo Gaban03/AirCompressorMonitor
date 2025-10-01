@@ -13,43 +13,19 @@ import jakarta.transaction.Transactional;
 public class ServiceCompressorDados {
 
     @Autowired
-    RepositoryCompressorDados repositoryCompressor;
+    RepositoryCompressorDados repositoryCompressorDados;
 
     @Transactional
-    public CompressorDados salvar(CompressorDados compressor) {
-        return repositoryCompressor.save(compressor);
+    public CompressorDados salvar(CompressorDados compressorDados) {
+        return repositoryCompressorDados.save(compressorDados);
     }
 
     public Optional<CompressorDados> buscarPorId(Integer id) {
-        return repositoryCompressor.findById(id);
-
+        return repositoryCompressorDados.findById(id);
     }
 
-    public CompressorDados atualizaDados(Integer id, CompressorDados compressorAtualizado) {
-
-        var optionalCompreess = buscarPorId(id);
-        if (!optionalCompreess.isPresent())
-            throw new IllegalArgumentException("O compressor não foi encontrado.");
-        var compressExiste = optionalCompreess.get();
-
-        
-        compressExiste.setTemperaturaArComprimido(compressorAtualizado.getTemperaturaArComprimido());
-        compressExiste.setTemperaturaOleo(compressorAtualizado.getTemperaturaOleo());
-        compressExiste.setDataHora(compressorAtualizado.getDataHora());
-        compressExiste.setEstado(compressorAtualizado.getEstado());
-        compressExiste.setHoraCarga(compressorAtualizado.getHoraCarga());
-        compressExiste.setHoraTotal(compressorAtualizado.getHoraTotal());
-        compressExiste.setPressaoCarga(compressorAtualizado.getPressaoCarga());
-        compressExiste.setPressaoArComprimido(compressorAtualizado.getPressaoArComprimido()); 
-        compressExiste.setTemperaturaAmbiente(compressorAtualizado.getTemperaturaAmbiente());
-        
-        var compressorSalvo = repositoryCompressor.save(compressExiste);
-       
-        return compressorSalvo;
-    }
-
-
+    @Transactional
     public Optional<CompressorDados> buscarUltimaLeitura(Integer idCompressor){
-        return repositoryCompressor.findTopByCompressorIdOrderByDataHoraDesc(idCompressor);
+        return repositoryCompressorDados.findTopByCompressorIdOrderByDataHoraDesc(idCompressor);
     }
 }

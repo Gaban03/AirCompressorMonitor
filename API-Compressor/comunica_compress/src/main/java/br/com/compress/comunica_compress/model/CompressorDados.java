@@ -2,7 +2,6 @@ package br.com.compress.comunica_compress.model;
 
 import java.time.LocalDateTime;
 
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
@@ -12,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,22 +33,18 @@ public class CompressorDados {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "compressor_id", nullable = false)
-    private Compressor compressor;
-
     @DateTimeFormat
     private LocalDateTime dataHora;
 
-    @NotBlank
+    @NotNull
     private Boolean estado;
 
-    @NotBlank
+    @NotNull
     private Float temperaturaArComprimido;
 
-    @NotBlank
+    @NotNull
     private Float temperaturaAmbiente;
-    
+
     @NotNull
     private Float temperaturaOleo;
 
@@ -66,4 +60,7 @@ public class CompressorDados {
     @NotNull
     private Float horaTotal;
 
+    @ManyToOne
+    @JoinColumn(name = "compressor_id", nullable = false)
+    private Compressor compressor;
 }
