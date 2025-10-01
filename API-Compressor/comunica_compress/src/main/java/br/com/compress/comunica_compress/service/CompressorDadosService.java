@@ -6,26 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.compress.comunica_compress.model.CompressorDados;
-import br.com.compress.comunica_compress.repository.RepositoryCompressorDados;
+import br.com.compress.comunica_compress.repository.CompressorDadosRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class ServiceCompressorDados {
+public class CompressorDadosService {
 
     @Autowired
-    RepositoryCompressorDados repositoryCompressorDados;
+    CompressorDadosRepository compressorDadosRepository;
 
     @Transactional
     public CompressorDados salvar(CompressorDados compressorDados) {
-        return repositoryCompressorDados.save(compressorDados);
+        return compressorDadosRepository.save(compressorDados);
     }
 
     public Optional<CompressorDados> buscarPorId(Integer id) {
-        return repositoryCompressorDados.findById(id);
+        return compressorDadosRepository.findById(id);
     }
 
     @Transactional
     public Optional<CompressorDados> buscarUltimaLeitura(Integer idCompressor){
-        return repositoryCompressorDados.findTopByCompressorIdOrderByDataHoraDesc(idCompressor);
+        return compressorDadosRepository.findTopByCompressorIdOrderByDataHoraDesc(idCompressor);
     }
 }

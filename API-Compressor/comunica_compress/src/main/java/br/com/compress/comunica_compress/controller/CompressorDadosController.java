@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compress.comunica_compress.model.CompressorDados;
-import br.com.compress.comunica_compress.service.ServiceCompressorDados;
+import br.com.compress.comunica_compress.service.CompressorDadosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/compressor")
-public class ControllerCompressorDados {
+public class CompressorDadosController {
 
     @Autowired
-    ServiceCompressorDados serviceCompressorDados;
+    CompressorDadosService compressorDadosService;
 
     @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
     @ApiResponses(value = {
@@ -31,7 +31,7 @@ public class ControllerCompressorDados {
     })
     @PostMapping("/dados")
     public ResponseEntity<CompressorDados> enviarDadosSensores(@RequestBody CompressorDados compressorDados) {
-        return ResponseEntity.ok(serviceCompressorDados.salvar(compressorDados));
+        return ResponseEntity.ok(compressorDadosService.salvar(compressorDados));
     }
 
     @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
@@ -41,7 +41,7 @@ public class ControllerCompressorDados {
     })
     @GetMapping("/dados/{idCompressor}")
     public ResponseEntity<CompressorDados> lerDadosSensores(@PathVariable Integer idCompressor) {
-        Optional<CompressorDados> dadosRecentes = serviceCompressorDados.buscarUltimaLeitura(idCompressor);
+        Optional<CompressorDados> dadosRecentes = compressorDadosService.buscarUltimaLeitura(idCompressor);
         return dadosRecentes.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }

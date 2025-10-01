@@ -6,7 +6,7 @@ import br.com.compress.comunica_compress.model.CompressorDados;
 
 import java.util.Optional;
 
-public interface RepositoryCompressorDados extends JpaRepository<CompressorDados,Integer> {
+public interface CompressorDadosRepository extends JpaRepository<CompressorDados,Integer> {
 
 Optional<CompressorDados> findTopByCompressorIdOrderByDataHoraDesc(Integer idCompressor);
     
