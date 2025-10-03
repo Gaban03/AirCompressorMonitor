@@ -1,5 +1,14 @@
 -- MySQL Workbench Forward Engineering
 
+
+
+-- -----------------------------------------------------
+-- Schema compressor_db
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema compressor_db
+-- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `compressor_db` DEFAULT CHARACTER SET utf8 ;
 USE `compressor_db` ;
 
@@ -67,8 +76,58 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`registro_compressor` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `compressor_db`.`roles`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `compressor_db`.`roles` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(10) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `compressor_db`.`usuario_roles`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `compressor_db`.`usuario_roles` (
+  `roles_id` INT NOT NULL,
+  `usuario_id` INT NOT NULL,
+  PRIMARY KEY (`roles_id`, `usuario_id`),
+  INDEX `fk_roles_has_usuario_usuario1_idx` (`usuario_id` ASC) VISIBLE,
+  INDEX `fk_roles_has_usuario_roles1_idx` (`roles_id` ASC) VISIBLE,
+  CONSTRAINT `fk_roles_has_usuario_roles1`
+    FOREIGN KEY (`roles_id`)
+    REFERENCES `compressor_db`.`roles` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_roles_has_usuario_usuario1`
+    FOREIGN KEY (`usuario_id`)
+    REFERENCES `compressor_db`.`usuario` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+
+
+
+
+
+-- ------------------------------------------------------------------------------------------ --
+
+-- compressor ---
+
+-- ------------------------------------------------------------------------------------------ --
+
 INSERT INTO compressor_db.compressor (nome, senai) VALUES ("Compressor Teste", "Senai 601");
 INSERT INTO compressor_db.compressor (nome, senai) VALUES ("Compressor 2", "Senai 001");
+
+-- ------------------------------------------------------------------------------------------ --
+
+-- registro_compressor --
+
+-- ------------------------------------------------------------------------------------------ --
 
 INSERT INTO compressor_db.registro_compressor
 (data_hora, estado, hora_carga, hora_total, pressao_ar_comprimido, pressao_carga,
@@ -87,3 +146,18 @@ INSERT INTO compressor_db.registro_compressor
  temperatura_ambiente, temperatura_ar_comprimido, temperatura_oleo, compressor_id)
 VALUES
 ('2025-10-03 09:30:00', false, 120, 540, 7.5, 8.0, 25.3, 45.2, 60.8, 2);
+
+-- ------------------------------------------------------------------------------------------ --
+
+-- usuario/roles --
+
+-- ------------------------------------------------------------------------------------------ --
+
+INSERT INTO compressor_db.usuario (email, senha) VALUES ("admin@gmail.com", "murilolindo");
+INSERT INTO compressor_db.roles (nome) VALUES ("admin");
+INSERT INTO compressor_db.roles (nome) VALUES ("user");
+
+INSERT INTO usuario_roles (usuario_id, roles_id)
+VALUES (1, 1);
+
+-- ------------------------------------------------------------------------------------------ --

@@ -1,9 +1,14 @@
 package br.com.compress.comunica_compress.model;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -32,5 +37,17 @@ public class Usuario {
 
     @NotBlank
     private String senha;
+
+    @ManyToMany
+    @JoinTable(
+        name = "usuario_roles",
+        joinColumns = @JoinColumn(
+            name = "usuario_id"
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "roles_id"
+        )
+    )
+    private Set<Role> roles;
 
 }
