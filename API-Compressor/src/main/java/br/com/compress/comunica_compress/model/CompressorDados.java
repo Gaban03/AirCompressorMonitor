@@ -34,7 +34,7 @@ public class CompressorDados {
     private Integer id;
 
     @DateTimeFormat
-    private LocalDateTime dataHora;
+    private LocalDateTime dataHora = LocalDateTime.now();
 
     @NotNull
     private Boolean estado;

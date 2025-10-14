@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.compress.comunica_compress.dto.CompressorDadosRequest;
+import br.com.compress.comunica_compress.dto.CompressorDadosResponse;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.service.CompressorDadosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class CompressorDadosController {
 
     @Autowired
-    CompressorDadosService compressorDadosService;
+    private CompressorDadosService compressorDadosService;
 
     @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
     @ApiResponses(value = {
@@ -30,8 +32,8 @@ public class CompressorDadosController {
             @ApiResponse(responseCode = "400", description = "Erro ao inserir dados!")
     })
     @PostMapping("/dados")
-    public ResponseEntity<CompressorDados> enviarDadosSensores(@RequestBody CompressorDados compressorDados) {
-        return ResponseEntity.ok(compressorDadosService.salvar(compressorDados));
+    public ResponseEntity<CompressorDadosResponse> enviarDadosSensores(@RequestBody CompressorDadosRequest request) {
+        return ResponseEntity.ok(compressorDadosService.salvar(request));
     }
 
     @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
