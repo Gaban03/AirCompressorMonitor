@@ -2,6 +2,9 @@ package br.com.compress.comunica_compress.model;
 
 import java.util.Set;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import br.com.compress.comunica_compress.dto.LoginRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -49,5 +52,10 @@ public class Usuario {
         )
     )
     private Set<Role> roles;
+
+    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(loginRequest.senha(), this.senha);
+        
+    }
 
 }
