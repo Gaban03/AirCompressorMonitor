@@ -1,6 +1,6 @@
 services:
   db:
-    image: mysql:8.0
+    image: docker.io/mysql:8.0
     container_name: mysql_db
     environment:
       MYSQL_ROOT_PASSWORD: 123456
@@ -13,7 +13,7 @@ services:
       - api
 
   api:
-    build: .
+    build: ./AirCompressorMonitor/API-Compressor
     container_name: compressor_api
     depends_on:
       - db
