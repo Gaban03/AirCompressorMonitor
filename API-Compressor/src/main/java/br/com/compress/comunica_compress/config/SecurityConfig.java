@@ -42,7 +42,8 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-resources/**",
                         "/webjars/**").permitAll()
-                        .anyRequest().authenticated())
+                        // .anyRequest().authenticated()
+                        )
                 .csrf(csrf -> csrf.disable()) // deixar disable somente para dev, para deploy
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
