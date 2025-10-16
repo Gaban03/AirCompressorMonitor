@@ -13,7 +13,7 @@ services:
       - api
 
   api:
-    build: ./AirCompressorMonitor/API-Compressor
+    build: .
     container_name: compressor_api
     depends_on:
       - db
