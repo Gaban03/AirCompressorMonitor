@@ -1,0 +1,23 @@
+name: Deploy Podman Compose
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy via Podman Compose
+        run: |
+          cd ./API-Compressor
+          podman compose down
+          podman compose up -d --build
