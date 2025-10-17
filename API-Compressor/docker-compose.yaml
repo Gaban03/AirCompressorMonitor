@@ -11,12 +11,29 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - api
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p123456",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
 
   api:
     build: .
     container_name: compressor_api
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/compressor_db
       SPRING_DATASOURCE_USERNAME: root
