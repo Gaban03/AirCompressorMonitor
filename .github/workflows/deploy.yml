@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/db-entrypoint
   workflow_dispatch:
 
 jobs:
@@ -17,5 +18,5 @@ jobs:
       - name: Deploy via Podman Compose
         run: |
           cd ./API-Compressor
-          podman-compose down
+          podman-compose down -v
           podman-compose up -d --build
