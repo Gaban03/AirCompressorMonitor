@@ -153,11 +153,7 @@ VALUES
 
 -- ------------------------------------------------------------------------------------------ --
 
-INSERT INTO compressor_db.usuario (email, senha) VALUES ("admin@gmail.com", "murilolindo");
 INSERT INTO compressor_db.roles (nome) VALUES ("admin");
-INSERT INTO compressor_db.roles (nome) VALUES ("user");
-
-INSERT INTO usuario_roles (usuario_id, roles_id)
-VALUES (1, 1);
+INSERT INTO compressor_db.roles (nome) VALUES ("basic");
 
 -- ------------------------------------------------------------------------------------------ --

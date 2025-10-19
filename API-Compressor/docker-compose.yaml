@@ -29,22 +29,22 @@ services:
       retries: 10
       start_period: 10s
 
-  api:
-    build: .
-    container_name: compressor_api
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/compressor_db
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 123456
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    ports:
-      - "9091:8080"
-    networks:
-      - api
+  # api:
+  #   build: .
+  #   container_name: compressor_api
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   restart: unless-stopped
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/compressor_db
+  #     SPRING_DATASOURCE_USERNAME: root
+  #     SPRING_DATASOURCE_PASSWORD: 123456
+  #     SPRING_JPA_HIBERNATE_DDL_AUTO: update
+  #   ports:
+  #     - "9091:8080"
+  #   networks:
+  #     - api
 
 networks:
   api:

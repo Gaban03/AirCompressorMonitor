@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -22,7 +21,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     private final RSAPrivateKey privateKey;
@@ -42,7 +40,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**",
                         "/swagger-resources/**",
                         "/webjars/**").permitAll()
-                        // .anyRequest().authenticated()
+                        .anyRequest().permitAll() // <---- Mudar para authenticated futuramente
                         )
                 .csrf(csrf -> csrf.disable()) // deixar disable somente para dev, para deploy
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

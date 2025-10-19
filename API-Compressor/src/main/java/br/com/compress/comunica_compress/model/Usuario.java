@@ -4,8 +4,10 @@ import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.compress.comunica_compress.dto.LoginRequest;
+import br.com.compress.comunica_compress.dto.LoginRequestDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,7 +43,7 @@ public class Usuario {
     @NotBlank
     private String senha;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
         name = "usuario_roles",
         joinColumns = @JoinColumn(
@@ -53,7 +55,7 @@ public class Usuario {
     )
     private Set<Role> roles;
 
-    public boolean isLoginCorrect(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
+    public boolean isLoginCorrect(LoginRequestDTO loginRequest, PasswordEncoder passwordEncoder) {
         return passwordEncoder.matches(loginRequest.senha(), this.senha);
         
     }

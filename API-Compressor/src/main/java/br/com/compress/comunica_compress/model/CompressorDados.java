@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +38,7 @@ public class CompressorDados {
     private LocalDateTime dataHora = LocalDateTime.now();
 
     @NotNull
+    @Column(nullable = false)
     private Boolean estado;
 
     @NotNull
@@ -49,16 +51,22 @@ public class CompressorDados {
     private Float temperaturaOleo;
 
     @NotNull
-    private Float pressaoArComprimido;
+    private Float temperaturaOrvalho;
 
     @NotNull
-    private Float pressaoCarga;
+    private Float pressaoArComprimido;
 
     @NotNull
     private Float horaCarga;
 
     @NotNull
     private Float horaTotal;
+
+    @NotNull
+    private Float pressaoCarga;
+
+    @NotNull
+    private Float pressaoAlivio;
 
     @ManyToOne
     @JoinColumn(name = "compressor_id", nullable = false)
