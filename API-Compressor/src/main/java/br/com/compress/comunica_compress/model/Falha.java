@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 public class Falha {
 
     @Id
-    private Integer id;
+    private String id;
     
     @NotBlank
     private String descricao;

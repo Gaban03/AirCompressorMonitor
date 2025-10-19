@@ -71,4 +71,8 @@ public class CompressorDados {
     @ManyToOne
     @JoinColumn(name = "compressor_id", nullable = false)
     private Compressor compressor;
+
+    @ManyToOne
+    @JoinColumn(name = "falha_idFalha")
+    private Falha falha;
 }
