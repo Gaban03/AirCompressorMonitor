@@ -28,7 +28,7 @@ ENGINE = InnoDB;
 -- Table `compressor_db`.`falha`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compressor_db`.`falha` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` VARCHAR(4) NOT NULL,
   `descricao` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`registro_compressor` (
   `hora_carga` FLOAT NULL,
   `hora_total` FLOAT NULL,
   `pressao_carga` FLOAT NULL,
-  `falha_idFalha` INT NULL,
+  `falha_idFalha` VARCHAR(4) NULL,
   `compressor_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `fk_registro compressor_falha1_idx` (`falha_idFalha` ASC) VISIBLE,
@@ -107,53 +107,3 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`usuario_roles` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-
-
-
-
-
-
--- ------------------------------------------------------------------------------------------ --
-
--- compressor ---
-
--- ------------------------------------------------------------------------------------------ --
-
-INSERT INTO compressor_db.compressor (nome, senai) VALUES ("Compressor Teste", "Senai 601");
-INSERT INTO compressor_db.compressor (nome, senai) VALUES ("Compressor 2", "Senai 001");
-
--- ------------------------------------------------------------------------------------------ --
-
--- registro_compressor --
-
--- ------------------------------------------------------------------------------------------ --
-
-INSERT INTO compressor_db.registro_compressor
-(data_hora, estado, hora_carga, hora_total, pressao_ar_comprimido, pressao_carga,
- temperatura_ambiente, temperatura_ar_comprimido, temperatura_oleo, compressor_id)
-VALUES
-('2025-10-03 09:30:00', true, 120, 540, 7.5, 8.0, 25.3, 45.2, 60.8, 1);
-
-INSERT INTO compressor_db.registro_compressor
-(data_hora, estado, hora_carga, hora_total, pressao_ar_comprimido, pressao_carga,
- temperatura_ambiente, temperatura_ar_comprimido, temperatura_oleo, compressor_id)
-VALUES
-('2025-10-03 09:35:00', false, 120, 540, 7.5, 8.0, 25.3, 45.2, 60.8, 1);
-
-INSERT INTO compressor_db.registro_compressor
-(data_hora, estado, hora_carga, hora_total, pressao_ar_comprimido, pressao_carga,
- temperatura_ambiente, temperatura_ar_comprimido, temperatura_oleo, compressor_id)
-VALUES
-('2025-10-03 09:30:00', false, 120, 540, 7.5, 8.0, 25.3, 45.2, 60.8, 2);
-
--- ------------------------------------------------------------------------------------------ --
-
--- usuario/roles --
-
--- ------------------------------------------------------------------------------------------ --
-
-INSERT INTO compressor_db.roles (nome) VALUES ("admin");
-INSERT INTO compressor_db.roles (nome) VALUES ("basic");
-
--- ------------------------------------------------------------------------------------------ --

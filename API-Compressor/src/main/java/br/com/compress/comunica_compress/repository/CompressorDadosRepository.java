@@ -1,10 +1,10 @@
 package br.com.compress.comunica_compress.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.compress.comunica_compress.model.CompressorDados;
-
-import java.util.Optional;
 
 public interface CompressorDadosRepository extends JpaRepository<CompressorDados,Integer> {
 
