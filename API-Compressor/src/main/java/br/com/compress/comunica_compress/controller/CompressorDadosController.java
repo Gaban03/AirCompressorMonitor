@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.compress.comunica_compress.dto.CompressorDadosRequest;
-import br.com.compress.comunica_compress.dto.CompressorDadosResponse;
+import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
+import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.service.CompressorDadosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,27 +23,37 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/compressor")
 public class CompressorDadosController {
 
-    @Autowired
-    private CompressorDadosService compressorDadosService;
+        @Autowired
+        private CompressorDadosService compressorDadosService;
 
-    @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Dados inseridos com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Erro ao inserir dados!")
-    })
-    @PostMapping("/dados")
-    public ResponseEntity<CompressorDadosResponse> enviarDadosSensores(@RequestBody CompressorDadosRequest request) {
-        return ResponseEntity.ok(compressorDadosService.salvar(request));
-    }
+        // ------------------------------------------------------------- //
 
-    @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Dados recebidos com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Erro ao receber dados!")
-    })
-    @GetMapping("/dados/{idCompressor}")
-    public ResponseEntity<CompressorDados> lerDadosSensores(@PathVariable Integer idCompressor) {
-        Optional<CompressorDados> dadosRecentes = compressorDadosService.buscarUltimaLeitura(idCompressor);
-        return dadosRecentes.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-    }
+        @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Dados inseridos com sucesso!"),
+                        @ApiResponse(responseCode = "400", description = "Erro ao inserir dados!")
+        })
+        @PostMapping("/dados")
+        public ResponseEntity<CompressorDadosResponseDTO> enviarDadosSensores(
+                        @RequestBody CompressorDadosRequestDTO request) {
+                return ResponseEntity.ok(compressorDadosService.salvar(request));
+        }
+
+        // ------------------------------------------------------------- //
+
+        @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Dados recebidos com sucesso!"),
+                        @ApiResponse(responseCode = "400", description = "Erro ao receber dados!")
+        })
+        @GetMapping("/dados/{idCompressor}")
+        public ResponseEntity<CompressorDadosResponseDTO> lerDadosSensores(@PathVariable Integer idCompressor) {
+
+                Optional<CompressorDados> dadosRecentes = compressorDadosService.buscarUltimaLeitura(idCompressor);
+
+                return dadosRecentes
+                                .map(dado -> ResponseEntity.ok(compressorDadosService.toResponse(dado)))
+                                .orElse(ResponseEntity.notFound().build());
+        }
+
 }

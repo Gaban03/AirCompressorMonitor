@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.compress.comunica_compress.dto.LoginRequest;
-import br.com.compress.comunica_compress.dto.LoginResponse;
+import br.com.compress.comunica_compress.dto.LoginRequestDTO;
+import br.com.compress.comunica_compress.dto.LoginResponseDTO;
 import br.com.compress.comunica_compress.repository.UsuarioRepository;
 
 
@@ -34,7 +34,7 @@ public class TokenController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequest) {
         var usuario = usuarioRepository.findByEmail(loginRequest.email());
 
         if (usuario.isEmpty() || !usuario.get().isLoginCorrect(loginRequest, bCryptPasswordEncoder)){
@@ -53,7 +53,7 @@ public class TokenController {
         
         var jwtValue = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return ResponseEntity.ok(new LoginResponse(jwtValue, expiresIn));
+        return ResponseEntity.ok(new LoginResponseDTO(jwtValue, expiresIn));
     }
     
 }

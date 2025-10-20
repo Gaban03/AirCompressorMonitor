@@ -17,5 +17,5 @@ jobs:
       - name: Deploy via Podman Compose
         run: |
           cd ./API-Compressor
-          podman-compose down
+          podman-compose down -v
           podman-compose up -d --build

@@ -25,4 +25,24 @@ public class Role {
 
     @NotNull
     private String nome;
+
+    public enum Values {
+        ADMIN(1),
+        BASIC(2);
+
+        int roleId;
+
+        Values(int roleId){
+            this.roleId = roleId;
+        }
+
+        public int getRoleId() {
+            return roleId;
+        }
+
+        public void setRoleId(int roleId) {
+            this.roleId = roleId;
+        }
+
+    }
 }
