@@ -1,5 +1,6 @@
 package br.com.compress.comunica_compress.model;
 
+import br.com.compress.comunica_compress.enums.Estado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,5 +31,9 @@ public class Compressor {
     @NotBlank
     @Column(nullable = false)
     private String senai;
+
+    private Estado estado;
+
+    private Boolean ligado;
     
 }

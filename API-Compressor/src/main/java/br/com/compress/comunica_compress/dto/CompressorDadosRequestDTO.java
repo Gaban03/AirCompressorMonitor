@@ -1,7 +1,10 @@
 package br.com.compress.comunica_compress.dto;
 
+import br.com.compress.comunica_compress.enums.Estado;
+
 public record CompressorDadosRequestDTO(
-        Boolean estado,
+        Estado estado,
+        Boolean ligado,
         Float temperaturaArComprimido,
         Float temperaturaAmbiente,
         Float temperaturaOleo,
