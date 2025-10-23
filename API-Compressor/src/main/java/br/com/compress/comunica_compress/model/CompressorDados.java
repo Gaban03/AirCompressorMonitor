@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import br.com.compress.comunica_compress.enums.Estado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,11 +38,16 @@ public class CompressorDados {
     private Integer id;
 
     @DateTimeFormat
-    private LocalDateTime dataHora = LocalDateTime.now();
+    private LocalDateTime dataHora = LocalDateTime.now().minusHours(3);
 
     @NotNull
     @Column(nullable = false)
-    private Boolean estado;
+    private Boolean ligado;
+
+    @NotNull
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Estado estado = Estado.STANDBY;
 
     @NotNull
     private Float temperaturaArComprimido;
