@@ -41,8 +41,8 @@ CREATE TABLE
     `id` INT NOT NULL AUTO_INCREMENT,
     `nome` VARCHAR(45) NULL,
     `senai` VARCHAR(45) NULL,
-    'estado' VARCHAR(10) NULL,
-    'ligado' TINYINT NULL,
+    `estado` VARCHAR(10) NULL,
+    `ligado` TINYINT NULL,
     PRIMARY KEY (`id`)
   ) ENGINE = InnoDB;
 
@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`comandos` (
     `comando` TINYINT NULL,
     `data_hora` DATETIME NULL,
     PRIMARY KEY (`id`),
-    INDEX `fk_registro_compressor_compressor1_idx` (`compressor_id` ASC),
-    CONSTRAINT `fk_registro_compressor_compressor1`
+    INDEX `fk_comandos_compressor1_idx` (`compressor_id` ASC),
+    CONSTRAINT `fk_comandos_compressor1`
         FOREIGN KEY (`compressor_id`)
         REFERENCES `compressor_db`.`compressor` (`id`)
         ON DELETE NO ACTION
@@ -80,6 +80,7 @@ CREATE TABLE
     `hora_carga` FLOAT NULL,
     `hora_total` FLOAT NULL,
     `pressao_carga` FLOAT NULL,
+    `pressao_alivio` FLOAT NULL,
     `falha_idFalha` VARCHAR(4) NULL,
     `compressor_id` INT NOT NULL,
     PRIMARY KEY (`id`),

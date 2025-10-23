@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
@@ -46,8 +46,8 @@ public class CompressorDadosController {
                         @ApiResponse(responseCode = "200", description = "Dados recebidos com sucesso!"),
                         @ApiResponse(responseCode = "400", description = "Erro ao receber dados!")
         })
-        @GetMapping("/dados/{idCompressor}")
-        public ResponseEntity<CompressorDadosResponseDTO> lerDadosSensores(@PathVariable Integer idCompressor) {
+        @GetMapping("/dados")
+        public ResponseEntity<CompressorDadosResponseDTO> lerDadosSensores(@RequestParam Integer idCompressor) {
 
                 Optional<CompressorDados> dadosRecentes = compressorDadosService.buscarUltimaLeitura(idCompressor);
 
