@@ -16,8 +16,6 @@ import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.service.CompressorDadosService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/compressor")
@@ -26,26 +24,15 @@ public class CompressorDadosController {
         @Autowired
         private CompressorDadosService compressorDadosService;
 
-        // ------------------------------------------------------------- //
-
         @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Dados inseridos com sucesso!"),
-                        @ApiResponse(responseCode = "400", description = "Erro ao inserir dados!")
-        })
         @PostMapping("/dados")
         public ResponseEntity<CompressorDadosResponseDTO> enviarDadosSensores(
                         @RequestBody CompressorDadosRequestDTO request) {
                 return ResponseEntity.ok(compressorDadosService.salvar(request));
         }
 
-        // ------------------------------------------------------------- //
 
         @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Dados recebidos com sucesso!"),
-                        @ApiResponse(responseCode = "400", description = "Erro ao receber dados!")
-        })
         @GetMapping("/dados")
         public ResponseEntity<CompressorDadosResponseDTO> lerDadosSensores(@RequestParam Integer idCompressor) {
 

@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compress.comunica_compress.dto.ComandoRequestDTO;
+import br.com.compress.comunica_compress.dto.ComandoResponseDTO;
 import br.com.compress.comunica_compress.model.Comando;
 import br.com.compress.comunica_compress.repository.ComandoRepository;
 import br.com.compress.comunica_compress.service.ComandoService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.transaction.Transactional;
 
 @RestController
@@ -29,26 +28,30 @@ public class ComandoController {
     private ComandoRepository comandoRepository;
 
     @Operation(description = "Enviar/inserir comando de liga/desliga do compressor no banco")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comando enviado com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Erro ao enviar comando!")
-    })
     @PostMapping("/comando")
     @Transactional
-    public ResponseEntity<Comando> enviarComando(@RequestBody ComandoRequestDTO comandoTO) {
+    public ResponseEntity<ComandoResponseDTO> enviarComando(@RequestBody ComandoRequestDTO comandoTO) {
         Comando comando = comandoService.toEntity(comandoTO);
         comandoRepository.save(comando);
-        return ResponseEntity.ok(comando);
+        ComandoResponseDTO responseDTO = new ComandoResponseDTO(
+                comando.getId(),
+                comando.getCompressor().getId(),
+                comando.getComando(),
+                comando.getDataHora());
+
+        return ResponseEntity.ok(responseDTO);
     }
 
     @Operation(description = "Pegar o comando de liga/desliga do compressor no banco")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Comando recebido com sucesso!"),
-            @ApiResponse(responseCode = "400", description = "Erro ao receber comando!")
-    })
     @GetMapping("/comando")
-    public ResponseEntity<Comando> receberComando(@RequestParam Integer compressorId) {
-        return comandoRepository.findTopByCompressorIdOrderByDataHoraDesc(compressorId)
+    public ResponseEntity<ComandoResponseDTO> receberComando(@RequestParam Integer compressorId) {
+        return comandoRepository
+                .findTopByCompressorIdOrderByDataHoraDesc(compressorId)
+                .map(comando -> new ComandoResponseDTO(
+                        comando.getId(),
+                        comando.getCompressor().getId(),
+                        comando.getComando(),
+                        comando.getDataHora()))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

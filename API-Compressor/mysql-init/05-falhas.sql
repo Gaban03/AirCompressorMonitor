@@ -1,4 +1,4 @@
-INSERT INTO compressor_db.falha (id, descricao) VALUES ("0x00", '');
+INSERT INTO compressor_db.falha (id, descricao) VALUES ("0x00", 'Sem Falha');
 INSERT INTO compressor_db.falha (id, descricao) VALUES ("0x01", 'Falha sequência de fases');
 INSERT INTO compressor_db.falha (id, descricao) VALUES ("0x02", 'Falha sobrecorrente motor elétrico');
 INSERT INTO compressor_db.falha (id, descricao) VALUES ("0x03", 'Falha sobrecorrente ventilador');
