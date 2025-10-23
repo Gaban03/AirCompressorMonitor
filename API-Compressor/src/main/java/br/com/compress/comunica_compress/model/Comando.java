@@ -37,7 +37,7 @@ public class Comando {
     private Boolean comando;
 
     @Column(name = "data_hora")
-    private LocalDateTime dataHora = LocalDateTime.now();
+    private LocalDateTime dataHora = LocalDateTime.now().minusHours(3);
 
     public Comando(Compressor compressor, Boolean comando) {
         this.compressor = compressor;

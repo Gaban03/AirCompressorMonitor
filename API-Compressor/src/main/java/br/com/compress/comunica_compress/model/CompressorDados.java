@@ -38,7 +38,7 @@ public class CompressorDados {
     private Integer id;
 
     @DateTimeFormat
-    private LocalDateTime dataHora = LocalDateTime.now();
+    private LocalDateTime dataHora = LocalDateTime.now().minusHours(3);
 
     @NotNull
     @Column(nullable = false)
