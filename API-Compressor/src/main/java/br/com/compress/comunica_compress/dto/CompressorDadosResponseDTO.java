@@ -3,6 +3,7 @@ package br.com.compress.comunica_compress.dto;
 import java.time.LocalDateTime;
 
 import br.com.compress.comunica_compress.enums.Estado;
+import br.com.compress.comunica_compress.model.Falha;
 
 public record CompressorDadosResponseDTO(
         LocalDateTime dataHora,
@@ -16,5 +17,6 @@ public record CompressorDadosResponseDTO(
         Float horaCarga,
         Float horaTotal,
         Float pressaoCarga,
-        Float pressaoAlivio
+        Float pressaoAlivio,
+        Falha idFalha
 ) {}
