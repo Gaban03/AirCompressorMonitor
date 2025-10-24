@@ -30,7 +30,6 @@ public class CompressorDadosService {
     // DTO → Entity
     public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha) {
         CompressorDados entity = new CompressorDados();
-        entity.setEstado(dto.estado());
         entity.setLigado(dto.ligado());
         entity.setTemperaturaArComprimido(dto.temperaturaArComprimido());
         entity.setTemperaturaAmbiente(dto.temperaturaAmbiente());
@@ -50,7 +49,6 @@ public class CompressorDadosService {
     public CompressorDadosResponseDTO toResponse(CompressorDados entity) {
         return new CompressorDadosResponseDTO(
                 entity.getDataHora(),
-                entity.getEstado(),
                 entity.getLigado(),
                 entity.getTemperaturaArComprimido(),
                 entity.getTemperaturaAmbiente(),

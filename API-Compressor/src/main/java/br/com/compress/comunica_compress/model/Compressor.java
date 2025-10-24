@@ -1,10 +1,7 @@
 package br.com.compress.comunica_compress.model;
 
-import br.com.compress.comunica_compress.enums.Estado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,9 +31,8 @@ public class Compressor {
     @Column(nullable = false)
     private String senai;
 
-    @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private Estado estado;
+    private String estado;
 
     private Boolean ligado;
     
