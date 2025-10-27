@@ -2,8 +2,6 @@ package br.com.compress.comunica_compress.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.compress.comunica_compress.model.Falha;
-
 public record CompressorDadosResponseDTO(
         LocalDateTime dataHora,
         Boolean ligado,
@@ -16,5 +14,6 @@ public record CompressorDadosResponseDTO(
         Float horaTotal,
         Float pressaoCarga,
         Float pressaoAlivio,
-        Falha idFalha
+        String falhaId,
+        String falhaDescricao
 ) {}

@@ -47,6 +47,9 @@ public class CompressorDadosService {
 
     // Entity → DTO
     public CompressorDadosResponseDTO toResponse(CompressorDados entity) {
+        String falhaId = entity.getFalha() != null ? entity.getFalha().getId() : null;
+        String falhaDescricao = entity.getFalha() != null ? entity.getFalha().getDescricao() : null;
+
         return new CompressorDadosResponseDTO(
                 entity.getDataHora(),
                 entity.getLigado(),
@@ -59,7 +62,8 @@ public class CompressorDadosService {
                 entity.getHoraTotal(),
                 entity.getPressaoCarga(),
                 entity.getPressaoAlivio(),
-                entity.getFalha());
+                falhaId,
+                falhaDescricao);
     }
 
     @Transactional
