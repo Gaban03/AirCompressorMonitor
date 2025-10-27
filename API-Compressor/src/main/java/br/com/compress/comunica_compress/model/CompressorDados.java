@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import br.com.compress.comunica_compress.enums.Estado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,11 +43,6 @@ public class CompressorDados {
     private Boolean ligado;
 
     @NotNull
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Estado estado = Estado.STANDBY;
-
-    @NotNull
     private Float temperaturaArComprimido;
 
     @NotNull
@@ -80,7 +73,7 @@ public class CompressorDados {
     @JoinColumn(name = "compressor_id", nullable = false)
     private Compressor compressor;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "falha_idFalha")
     private Falha falha;
 }

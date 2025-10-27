@@ -1,5 +1,7 @@
 package br.com.compress.comunica_compress.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.transaction.Transactional;
 
 @RestController
-@RequestMapping("/compressor")
+@RequestMapping("/ordemRemota")
 public class ComandoController {
 
     @Autowired
@@ -30,29 +32,33 @@ public class ComandoController {
     @Operation(description = "Enviar/inserir comando de liga/desliga do compressor no banco")
     @PostMapping("/comando")
     @Transactional
-    public ResponseEntity<ComandoResponseDTO> enviarComando(@RequestBody ComandoRequestDTO comandoTO) {
-        Comando comando = comandoService.toEntity(comandoTO);
+    public ResponseEntity<ComandoResponseDTO> enviarComando(@RequestBody ComandoRequestDTO comandoDTO) {
+        Comando comando = comandoService.toEntity(comandoDTO);
         comandoRepository.save(comando);
         ComandoResponseDTO responseDTO = new ComandoResponseDTO(
                 comando.getId(),
                 comando.getCompressor().getId(),
                 comando.getComando(),
+                comando.getCompressor().getEstado(),
                 comando.getDataHora());
 
         return ResponseEntity.ok(responseDTO);
     }
 
-    @Operation(description = "Pegar o comando de liga/desliga do compressor no banco")
+    @Operation(summary = "Busca o último comando recente de um compressor", description = "Retorna o último comando do compressor nas últimas 21 horas. "
+            + "Se não houver comandos nesse período, retorna 204.")
     @GetMapping("/comando")
     public ResponseEntity<ComandoResponseDTO> receberComando(@RequestParam Integer compressorId) {
+        LocalDateTime limite = LocalDateTime.now().minusHours(21);
         return comandoRepository
-                .findTopByCompressorIdOrderByDataHoraDesc(compressorId)
+                .findTopByCompressorIdAndDataHoraAfterOrderByDataHoraDesc(compressorId, limite)
                 .map(comando -> new ComandoResponseDTO(
                         comando.getId(),
                         comando.getCompressor().getId(),
                         comando.getComando(),
+                        comando.getCompressor().getEstado(),
                         comando.getDataHora()))
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.noContent().build());
     }
 }
