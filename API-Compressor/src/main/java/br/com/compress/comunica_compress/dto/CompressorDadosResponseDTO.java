@@ -2,11 +2,8 @@ package br.com.compress.comunica_compress.dto;
 
 import java.time.LocalDateTime;
 
-import br.com.compress.comunica_compress.enums.Estado;
-
 public record CompressorDadosResponseDTO(
         LocalDateTime dataHora,
-        Estado estado,
         Boolean ligado,
         Float temperaturaArComprimido,
         Float temperaturaAmbiente,
@@ -16,5 +13,7 @@ public record CompressorDadosResponseDTO(
         Float horaCarga,
         Float horaTotal,
         Float pressaoCarga,
-        Float pressaoAlivio
+        Float pressaoAlivio,
+        String falhaId,
+        String falhaDescricao
 ) {}

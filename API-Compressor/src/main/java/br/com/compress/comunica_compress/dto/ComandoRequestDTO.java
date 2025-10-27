@@ -1,5 +1,6 @@
 package br.com.compress.comunica_compress.dto;
 
-public record ComandoRequestDTO(Integer compressorId, Boolean comando) {
-
+public record ComandoRequestDTO(Integer compressorId,
+        Boolean comando,
+        String estado) {
 }

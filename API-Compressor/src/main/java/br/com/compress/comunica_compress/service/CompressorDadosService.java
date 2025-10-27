@@ -9,8 +9,10 @@ import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
 import br.com.compress.comunica_compress.model.Compressor;
 import br.com.compress.comunica_compress.model.CompressorDados;
+import br.com.compress.comunica_compress.model.Falha;
 import br.com.compress.comunica_compress.repository.CompressorDadosRepository;
 import br.com.compress.comunica_compress.repository.CompressorRepository;
+import br.com.compress.comunica_compress.repository.FalhaRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -22,10 +24,12 @@ public class CompressorDadosService {
     @Autowired
     CompressorDadosRepository compressorDadosRepository;
 
+    @Autowired
+    FalhaRepository falhaRepository;
+
     // DTO → Entity
-    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor) {
+    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha) {
         CompressorDados entity = new CompressorDados();
-        entity.setEstado(dto.estado());
         entity.setLigado(dto.ligado());
         entity.setTemperaturaArComprimido(dto.temperaturaArComprimido());
         entity.setTemperaturaAmbiente(dto.temperaturaAmbiente());
@@ -37,14 +41,17 @@ public class CompressorDadosService {
         entity.setPressaoCarga(dto.pressaoCarga());
         entity.setPressaoAlivio(dto.pressaoAlivio());
         entity.setCompressor(compressor);
+        entity.setFalha(falha);
         return entity;
     }
 
     // Entity → DTO
     public CompressorDadosResponseDTO toResponse(CompressorDados entity) {
+        String falhaId = entity.getFalha() != null ? entity.getFalha().getId() : null;
+        String falhaDescricao = entity.getFalha() != null ? entity.getFalha().getDescricao() : null;
+
         return new CompressorDadosResponseDTO(
                 entity.getDataHora(),
-                entity.getEstado(),
                 entity.getLigado(),
                 entity.getTemperaturaArComprimido(),
                 entity.getTemperaturaAmbiente(),
@@ -53,16 +60,22 @@ public class CompressorDadosService {
                 entity.getPressaoArComprimido(),
                 entity.getHoraCarga(),
                 entity.getHoraTotal(),
+                entity.getPressaoCarga(),
                 entity.getPressaoAlivio(),
-                entity.getPressaoCarga());
+                falhaId,
+                falhaDescricao);
     }
 
     @Transactional
     public CompressorDadosResponseDTO salvar(CompressorDadosRequestDTO dto) {
         Compressor compressor = compressorRepository.findById(dto.compressorId())
-                .orElseThrow(() -> new IllegalArgumentException("Compressor não encontrado: " + dto.compressorId()));
+                .orElseThrow(
+                        () -> new IllegalArgumentException("Compressor de id: " + dto.compressorId() + "não existe!"));
 
-        CompressorDados compressorDadosEntity = toEntity(dto, compressor);
+        Falha falha = falhaRepository.findById(dto.falhaId())
+                .orElseThrow(() -> new IllegalArgumentException("Falha " + dto.falhaId() + "não existe!"));
+
+        CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha);
         CompressorDados saved = compressorDadosRepository.save(compressorDadosEntity);
 
         return toResponse(saved);

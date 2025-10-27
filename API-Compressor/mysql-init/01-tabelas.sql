@@ -42,7 +42,7 @@ CREATE TABLE
     `nome` VARCHAR(45) NULL,
     `senai` VARCHAR(45) NULL,
     `estado` VARCHAR(10) NULL,
-    `ligado` TINYINT NULL,
+    `ligado` BOOLEAN NULL,
     PRIMARY KEY (`id`)
   ) ENGINE = InnoDB;
 
@@ -70,7 +70,7 @@ CREATE TABLE
   IF NOT EXISTS `compressor_db`.`registro_compressor` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `data_hora` DATETIME NULL,
-    `ligado` TINYINT NULL,
+    `ligado` BOOLEAN NULL,
     `estado` VARCHAR(10) NULL,
     `temperatura_ar_Comprimido` FLOAT NULL,
     `temperatura_ambiente` FLOAT NULL,
