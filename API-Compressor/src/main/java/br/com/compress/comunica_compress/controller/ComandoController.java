@@ -17,48 +17,53 @@ import br.com.compress.comunica_compress.model.Comando;
 import br.com.compress.comunica_compress.repository.ComandoRepository;
 import br.com.compress.comunica_compress.service.ComandoService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/ordemRemota")
 public class ComandoController {
 
-    @Autowired
-    private ComandoService comandoService;
+        @Autowired
+        private ComandoService comandoService;
 
-    @Autowired
-    private ComandoRepository comandoRepository;
+        @Autowired
+        private ComandoRepository comandoRepository;
 
-    @Operation(description = "Enviar/inserir comando de liga/desliga do compressor no banco")
-    @PostMapping("/comando")
-    @Transactional
-    public ResponseEntity<ComandoResponseDTO> enviarComando(@RequestBody ComandoRequestDTO comandoDTO) {
-        Comando comando = comandoService.toEntity(comandoDTO);
-        comandoRepository.save(comando);
-        ComandoResponseDTO responseDTO = new ComandoResponseDTO(
-                comando.getId(),
-                comando.getCompressor().getId(),
-                comando.getComando(),
-                comando.getCompressor().getEstado(),
-                comando.getDataHora());
+        @Autowired
+        private EntityManager entityManager;
 
-        return ResponseEntity.ok(responseDTO);
-    }
+        @Operation(description = "Enviar/inserir comando de liga/desliga do compressor no banco")
+        @PostMapping("/comando")
+        @Transactional
+        public ResponseEntity<ComandoResponseDTO> enviarComando(@RequestBody ComandoRequestDTO comandoDTO) {
+                Comando comando = comandoService.toEntity(comandoDTO);
+                comandoRepository.save(comando);
+                entityManager.refresh(comando.getCompressor());
+                ComandoResponseDTO responseDTO = new ComandoResponseDTO(
+                                comando.getId(),
+                                comando.getCompressor().getId(),
+                                comando.getComando(),
+                                comando.getCompressor().getEstado(),
+                                comando.getDataHora());
 
-    @Operation(summary = "Busca o último comando recente de um compressor", description = "Retorna o último comando do compressor nas últimas 21 horas. "
-            + "Se não houver comandos nesse período, retorna 204.")
-    @GetMapping("/comando")
-    public ResponseEntity<ComandoResponseDTO> receberComando(@RequestParam Integer compressorId) {
-        LocalDateTime limite = LocalDateTime.now().minusHours(21);
-        return comandoRepository
-                .findTopByCompressorIdAndDataHoraAfterOrderByDataHoraDesc(compressorId, limite)
-                .map(comando -> new ComandoResponseDTO(
-                        comando.getId(),
-                        comando.getCompressor().getId(),
-                        comando.getComando(),
-                        comando.getCompressor().getEstado(),
-                        comando.getDataHora()))
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.noContent().build());
-    }
+                return ResponseEntity.ok(responseDTO);
+        }
+
+        @Operation(summary = "Busca o último comando recente de um compressor", description = "Retorna o último comando do compressor nas últimas 21 horas. "
+                        + "Se não houver comandos nesse período, retorna 204.")
+        @GetMapping("/comando")
+        public ResponseEntity<ComandoResponseDTO> receberComando(@RequestParam Integer compressorId) {
+                LocalDateTime limite = LocalDateTime.now().minusHours(21);
+                return comandoRepository
+                                .findTopByCompressorIdAndDataHoraAfterOrderByDataHoraDesc(compressorId, limite)
+                                .map(comando -> new ComandoResponseDTO(
+                                                comando.getId(),
+                                                comando.getCompressor().getId(),
+                                                comando.getComando(),
+                                                comando.getCompressor().getEstado(),
+                                                comando.getDataHora()))
+                                .map(ResponseEntity::ok)
+                                .orElse(ResponseEntity.noContent().build());
+        }
 }
