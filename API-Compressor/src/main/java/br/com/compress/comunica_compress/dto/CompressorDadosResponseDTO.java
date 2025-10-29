@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public record CompressorDadosResponseDTO(
         LocalDateTime dataHora,
         Boolean ligado,
+        String estado,
         Float temperaturaArComprimido,
         Float temperaturaAmbiente,
         Float temperaturaOleo,
