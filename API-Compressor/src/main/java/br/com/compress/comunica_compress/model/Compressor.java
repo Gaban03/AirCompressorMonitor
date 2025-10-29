@@ -31,9 +31,6 @@ public class Compressor {
     @Column(nullable = false)
     private String senai;
 
-    @Column(length = 10)
-    private String estado;
-
     private Boolean ligado;
     
 }
