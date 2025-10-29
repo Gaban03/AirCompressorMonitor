@@ -1,6 +1,8 @@
 package br.com.compress.comunica_compress.controller;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,29 +43,38 @@ public class ComandoController {
                 comandoRepository.save(comando);
                 entityManager.refresh(comando.getCompressor());
                 ComandoResponseDTO responseDTO = new ComandoResponseDTO(
-                                comando.getId(),
                                 comando.getCompressor().getId(),
                                 comando.getComando(),
-                                comando.getCompressor().getEstado(),
                                 comando.getDataHora());
 
                 return ResponseEntity.ok(responseDTO);
         }
 
-        @Operation(summary = "Busca o último comando recente de um compressor", description = "Retorna o último comando do compressor nas últimas 21 horas. "
+        @Operation(summary = "Busca o último comando recente de um compressor", description = "Retorna o último comando do compressor nos ultimos 60 minutos. "
                         + "Se não houver comandos nesse período, retorna 204.")
         @GetMapping("/comando")
         public ResponseEntity<ComandoResponseDTO> receberComando(@RequestParam Integer compressorId) {
-                LocalDateTime limite = LocalDateTime.now().minusHours(21);
-                return comandoRepository
-                                .findTopByCompressorIdAndDataHoraAfterOrderByDataHoraDesc(compressorId, limite)
-                                .map(comando -> new ComandoResponseDTO(
-                                                comando.getId(),
-                                                comando.getCompressor().getId(),
-                                                comando.getComando(),
-                                                comando.getCompressor().getEstado(),
-                                                comando.getDataHora()))
-                                .map(ResponseEntity::ok)
-                                .orElse(ResponseEntity.noContent().build());
+                Optional<Comando> latestComando = comandoRepository
+                                .findTopByCompressorIdOrderByDataHoraDesc(compressorId);
+
+                if (latestComando.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
+
+                LocalDateTime horarioAtual = LocalDateTime.now().minusHours(3);
+                LocalDateTime horarioComando = latestComando.get().getDataHora();
+
+                Duration diff = Duration.between(horarioComando, horarioAtual);
+
+                if (Math.abs(diff.toMinutes()) > 5) {
+                        return ResponseEntity.noContent().build();
+                }
+
+                ComandoResponseDTO responseDTO = new ComandoResponseDTO(
+                                latestComando.get().getCompressor().getId(),
+                                latestComando.get().getComando(),
+                                latestComando.get().getDataHora());
+
+                return ResponseEntity.ok(responseDTO);
         }
 }

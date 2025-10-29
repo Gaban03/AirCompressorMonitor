@@ -1,5 +1,6 @@
 package br.com.compress.comunica_compress.service;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class ComandoService {
 
         Comando comando = new Comando();
         comando.setCompressor(compressor);
+        comando.setDataHora(LocalDateTime.now().minusHours(3));
         comando.setComando(comandoRequestDTO.comando());
 
         return comando;

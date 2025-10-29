@@ -42,6 +42,9 @@ public class CompressorDados {
     @Column(nullable = false)
     private Boolean ligado;
 
+    @Column(nullable = true)
+    private String estado;
+
     @NotNull
     private Float temperaturaArComprimido;
 
