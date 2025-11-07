@@ -1,5 +1,6 @@
 package br.com.compress.comunica_compress.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +32,32 @@ public class CompressorDadosController {
                 return ResponseEntity.ok(compressorDadosService.salvar(request));
         }
 
-
         @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
         @GetMapping("/dados")
-        public ResponseEntity<CompressorDadosResponseDTO> lerDadosSensores(@RequestParam Integer idCompressor) {
+        public ResponseEntity<CompressorDadosResponseDTO> ultimosDadosSensores(@RequestParam Integer idCompressor) {
 
                 Optional<CompressorDados> dadosRecentes = compressorDadosService.buscarUltimaLeitura(idCompressor);
 
                 return dadosRecentes
                                 .map(dado -> ResponseEntity.ok(compressorDadosService.toResponse(dado)))
                                 .orElse(ResponseEntity.notFound().build());
+        }
+
+        @GetMapping("/dados-dashboard")
+        public ResponseEntity<List<CompressorDadosResponseDTO>> cincoUltimosDadosSensores(
+                        @RequestParam Integer idCompressor) {
+
+                List<CompressorDados> dadosDashboard = compressorDadosService.buscarDadosDashboard(idCompressor);
+
+                if (dadosDashboard.isEmpty()) {
+                        return ResponseEntity.notFound().build();
+                }
+
+                List<CompressorDadosResponseDTO> resposta = dadosDashboard.stream()
+                                .map(compressorDadosService::toResponse)
+                                .toList();
+
+                return ResponseEntity.ok(resposta);
         }
 
 }

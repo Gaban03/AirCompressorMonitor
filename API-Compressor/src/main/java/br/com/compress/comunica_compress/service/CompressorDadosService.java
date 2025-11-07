@@ -1,5 +1,6 @@
 package br.com.compress.comunica_compress.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,10 @@ public class CompressorDadosService {
     @Transactional
     public Optional<CompressorDados> buscarUltimaLeitura(Integer idCompressor) {
         return compressorDadosRepository.findTopByCompressorIdOrderByDataHoraDesc(idCompressor);
+    }
+
+    @Transactional
+    public List<CompressorDados> buscarDadosDashboard(Integer idCompressor) {
+        return compressorDadosRepository.findTop5ByCompressorIdOrderByDataHoraDesc(idCompressor);
     }
 }
