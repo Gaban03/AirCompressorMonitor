@@ -1,0 +1,1 @@
+part 'compressor_comando_dto.dart';
