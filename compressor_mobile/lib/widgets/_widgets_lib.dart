@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../src/authentication/_authentication_lib.dart';
 import '../views/_views_lib.dart';
+import '../view_models/_view_model_lib.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/_models_lib.dart';
@@ -21,3 +23,8 @@ part 'top_portion.dart';
 part 'contact_row.dart';
 part 'contact_info.dart';
 part 'profile_info_row.dart';
+part 'network_info_card.dart';
+part 'app_snackbar.dart';
+part 'side_menu_header.dart';
+part 'side_menu_item.dart';
+part 'side_menu_footer.dart';

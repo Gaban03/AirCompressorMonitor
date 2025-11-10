@@ -29,12 +29,12 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.onToggleVisibility,
-    this.backgroundColor = const Color(0xFFF9F9F9),
-    this.borderColor = const Color(0xFFE0E0E0),
-    this.focusedBorderColor = const Color(0xFFEF5350), // vermelho elegante
+    this.backgroundColor = const Color(0xFF2B2B2B),
+    this.borderColor = const Color(0xFF3A3A3A),
+    this.focusedBorderColor = Colors.redAccent,
     this.errorBorderColor = Colors.redAccent,
-    this.borderRadius = 16.0,
-    this.elevation = 2.0,
+    this.borderRadius = 14.0,
+    this.elevation = 3.0,
     this.labelStyle,
     this.hintStyle,
     this.inputTextStyle,
@@ -43,42 +43,63 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       elevation: elevation,
-      shadowColor: Colors.black12,
+      shadowColor: Colors.black45,
       borderRadius: BorderRadius.circular(borderRadius),
       child: Container(
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(borderRadius),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xFF2C2C2C),
+              Color(0xFF262626),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
         child: TextFormField(
           controller: controller,
           validator: validator,
           obscureText: isPassword ? obscureText : false,
           style: inputTextStyle ??
-              const TextStyle(fontSize: 16, color: Colors.black87),
+              const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+              ),
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
             labelText: label,
-            labelStyle:
-                labelStyle ?? const TextStyle(fontSize: 14, color: Colors.grey),
+            labelStyle: labelStyle ??
+                const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w500,
+                ),
             hintText: hint,
-            hintStyle:
-                hintStyle ?? const TextStyle(fontSize: 14, color: Colors.grey),
-            prefixIcon: Icon(prefixIcon, color: Colors.grey[700]),
+            hintStyle: hintStyle ??
+                const TextStyle(
+                  fontSize: 14,
+                  color: Colors.white38,
+                ),
+            prefixIcon:
+                Icon(prefixIcon, color: Colors.redAccent.withOpacity(0.9)),
             filled: true,
-            fillColor: backgroundColor,
+            fillColor: Colors.transparent,
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: borderColor),
+              borderSide: BorderSide(color: borderColor, width: 1.2),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: focusedBorderColor, width: 2.0),
+              borderSide: BorderSide(color: focusedBorderColor, width: 2),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: errorBorderColor),
+              borderSide: BorderSide(color: errorBorderColor, width: 1.5),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             focusedErrorBorder: OutlineInputBorder(
@@ -89,7 +110,7 @@ class CustomTextField extends StatelessWidget {
                 ? IconButton(
                     icon: Icon(
                       obscureText ? Icons.visibility_off : Icons.visibility,
-                      color: Colors.grey[700],
+                      color: Colors.white70,
                     ),
                     onPressed: onToggleVisibility,
                   )
