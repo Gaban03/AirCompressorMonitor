@@ -9,7 +9,6 @@ import '../widgets/_widgets_lib.dart';
 import '../src/authentication/_authentication_lib.dart';
 import '../view_models/_view_model_lib.dart';
 
-import 'dart:ui';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -28,6 +27,5 @@ part 'pressure_view.dart';
 part 'compressor_control.dart';
 part 'about.dart';
 part 'config_ip_view.dart';
-part 'config.dart';
 part 'about_dispositive_view.dart';
 part 'developer_profile_view.dart';

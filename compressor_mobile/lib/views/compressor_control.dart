@@ -56,7 +56,7 @@ class _CompressorControlState extends State<CompressorControl> {
                       Text(
                         "Controle do Compressor",
                         style: GoogleFonts.orbitron(
-                          fontSize: 23,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           letterSpacing: 1.2,

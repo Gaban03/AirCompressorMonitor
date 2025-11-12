@@ -98,7 +98,7 @@ class NetworkInfoCard extends StatelessWidget {
             child: RichText(
               text: TextSpan(
                 text: "$label: ",
-                style: GoogleFonts.poppins(
+                style: GoogleFonts.orbitron(
                   color: Colors.white70,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class NetworkInfoCard extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: value,
-                    style: GoogleFonts.poppins(
+                    style: GoogleFonts.orbitron(
                       color: Colors.white.withOpacity(0.9),
                       fontWeight: FontWeight.w600,
                     ),

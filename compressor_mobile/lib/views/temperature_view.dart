@@ -109,7 +109,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                           const SizedBox(width: 8),
                           Text(
                             widget.titulo,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.orbitron(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                         children: [
                           Text(
                             dataFormatada,
-                            style: GoogleFonts.poppins(
+                            style: GoogleFonts.orbitron(
                               color: Colors.white70,
                               fontSize: 13,
                             ),
@@ -140,7 +140,6 @@ class _TemperatureViewState extends State<TemperatureView> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 14, horizontal: 32),
@@ -170,7 +169,6 @@ class _TemperatureViewState extends State<TemperatureView> {
                     ),
                   ),
                   const SizedBox(height: 24),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -194,7 +192,6 @@ class _TemperatureViewState extends State<TemperatureView> {
                     ],
                   ),
                   const SizedBox(height: 24),
-
                   Container(
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -243,9 +240,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                         ),
                         titlesData: FlTitlesData(
                           leftTitles: AxisTitles(
-                            axisNameWidget: const Text(
+                            axisNameWidget: Text(
                               'Temperatura (°C)',
-                              style: TextStyle(
+                              style: GoogleFonts.orbitron(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                   color: Colors.white70),
@@ -267,11 +264,11 @@ class _TemperatureViewState extends State<TemperatureView> {
                             ),
                           ),
                           bottomTitles: AxisTitles(
-                            axisNameWidget: const Padding(
+                            axisNameWidget: Padding(
                               padding: EdgeInsets.only(top: 0),
                               child: Text(
                                 'Horário',
-                                style: TextStyle(
+                                style: GoogleFonts.orbitron(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                     color: Colors.white70),

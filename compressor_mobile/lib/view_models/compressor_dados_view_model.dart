@@ -1,7 +1,7 @@
 part of '_view_model_lib.dart';
 
 class CompressorDadosViewModel extends BaseViewModel {
-  static const int maxPoints = 5;
+  static const int maxPoints = 4;
 
   final CompressorService _service = getIt<CompressorService>();
 

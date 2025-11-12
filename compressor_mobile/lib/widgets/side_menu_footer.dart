@@ -10,7 +10,7 @@ class SideMenuFooter extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "v1.0.0",
+            "v2.0.0",
             style: GoogleFonts.poppins(
               color: Colors.white38,
               fontSize: 12,
@@ -18,7 +18,7 @@ class SideMenuFooter extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            "© 2025 SENAI Systems",
+            "© 2025 SENAI São Carlos",
             style: GoogleFonts.poppins(
               color: Colors.white24,
               fontSize: 11,

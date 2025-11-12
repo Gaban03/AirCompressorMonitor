@@ -91,7 +91,7 @@ class HomeMenuItem extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         subtitle,
-                        style: GoogleFonts.poppins(
+                        style: GoogleFonts.orbitron(
                           color: Colors.white70,
                           fontSize: 13,
                         ),
