@@ -1,7 +1,9 @@
 part of '_widgets_lib.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key});
+  final BuildContext parentContext;
+
+  const SideMenu({super.key, required this.parentContext});
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +31,17 @@ class SideMenu extends StatelessWidget {
               SideMenuItem(
                 icon: FontAwesomeIcons.house,
                 title: "Início",
-                onTap: () => _navigateTo(context, const HomeView()),
+                onTap: () => _navigateTo(const HomeView()),
               ),
               SideMenuItem(
                 icon: FontAwesomeIcons.gear,
                 title: "Configurações",
-                onTap: () => _navigateTo(context, const ConfigPage()),
+                onTap: () => _navigateTo(const ConfigIpView()),
               ),
               SideMenuItem(
                 icon: FontAwesomeIcons.circleInfo,
                 title: "Sobre",
-                onTap: () => _navigateTo(context, const About()),
+                onTap: () => _navigateTo(const About()),
               ),
               Padding(
                 padding:
@@ -72,8 +74,13 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  void _navigateTo(BuildContext context, Widget page) {
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+  void _navigateTo(Widget page) {
+    Navigator.pop(parentContext);
+    Future.delayed(const Duration(milliseconds: 200), () {
+      Navigator.push(
+        parentContext,
+        MaterialPageRoute(builder: (_) => page),
+      );
+    });
   }
 }

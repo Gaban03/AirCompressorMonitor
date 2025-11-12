@@ -44,7 +44,6 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 16),
-
                       CustomTextField(
                         controller: vm.ipController,
                         label: "Endereço IP",
@@ -53,7 +52,6 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                         validator: vm.validarIP,
                       ),
                       const SizedBox(height: 22),
-
                       CustomTextField(
                         controller: vm.portAPIController,
                         label: "Porta da API",
@@ -61,9 +59,7 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                         prefixIcon: Icons.api,
                         validator: vm.validarPorta,
                       ),
-
                       const SizedBox(height: 36),
-
                       SizedBox(
                         height: 52,
                         child: ElevatedButton(
@@ -109,9 +105,9 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                                     strokeWidth: 3,
                                   ),
                                 )
-                              : const Text(
+                              : Text(
                                   'Salvar Configurações',
-                                  style: TextStyle(
+                                  style: GoogleFonts.orbitron(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: 1.1,
@@ -119,10 +115,7 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                                 ),
                         ),
                       ),
-
                       const SizedBox(height: 40),
-
-                      // 🌐 Network Info
                       NetworkInfoCard(
                         connectionType: vm.connectionType,
                         ssid: vm.ssid,

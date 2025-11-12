@@ -6,18 +6,34 @@ class ContactInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ContactRow(
-          icon: Icons.email,
-          text: developer.email,
-        ),
-        const SizedBox(height: 10),
-        ContactRow(
-          icon: Icons.phone,
-          text: developer.telefone,
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1C1C1C),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.3), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.redAccent.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ContactRow(
+            icon: Icons.email_rounded,
+            text: developer.email,
+          ),
+          const SizedBox(height: 12),
+          ContactRow(
+            icon: Icons.phone_rounded,
+            text: developer.telefone,
+          ),
+        ],
+      ),
     );
   }
 }

@@ -14,12 +14,23 @@ class ContactRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: Colors.deepPurple),
-        const SizedBox(width: 10),
-        Flexible(
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.redAccent.withOpacity(0.15),
+            shape: BoxShape.circle,
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Icon(icon, color: Colors.redAccent, size: 20),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
           child: Text(
             text,
-            style: GoogleFonts.openSans(fontSize: 16),
+            style: GoogleFonts.openSans(
+              fontSize: 15,
+              color: Colors.white70,
+              height: 1.3,
+            ),
             overflow: TextOverflow.ellipsis,
           ),
         ),

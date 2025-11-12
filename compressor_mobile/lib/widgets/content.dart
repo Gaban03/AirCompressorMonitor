@@ -16,10 +16,8 @@ class Content extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      drawer: const SideMenu(),
-      appBar: CustomAppBar(
-        title: title,
-      ),
+      drawer: SideMenu(parentContext: context),
+      appBar: CustomAppBar(title: title),
       body: Container(
         width: size.width,
         height: size.height,
