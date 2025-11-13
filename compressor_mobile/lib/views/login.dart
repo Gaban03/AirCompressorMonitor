@@ -51,25 +51,9 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           const SizedBox(height: 18),
-                          Text(
-                            "Monitoramento do Compressor",
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.orbitron(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  blurRadius: 8,
-                                  color: Colors.black.withOpacity(0.6),
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                          ),
                         ],
                       ),
-                      const SizedBox(height: 40),
+                      const SizedBox(height: 10),
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(24),
@@ -96,6 +80,23 @@ class _LoginState extends State<Login> {
                           key: formKey,
                           child: Column(
                             children: [
+                              Text(
+                                "Monitoramento do Compressor",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.orbitron(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 8,
+                                      color: Colors.black.withOpacity(0.6),
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 40),
                               CustomTextField(
                                 controller: userEmail,
                                 label: "Email",

@@ -8,6 +8,14 @@ class CompressorService extends BaseService {
     return CompressorDados.fromJson(jsonData);
   }
 
+  Future<List<CompressorDados>> fetchDadosDashboard() async {
+    final jsonList = await get('compressor/dados-dashboard?idCompressor=1');
+
+    return (jsonList as List)
+        .map((item) => CompressorDados.fromJson(item))
+        .toList();
+  }
+
   Future<void> enviarComando(CompressorComandoDto comandoDto) async {
     await post('ordemRemota/comando', comandoDto.toJson());
   }
@@ -16,5 +24,4 @@ class CompressorService extends BaseService {
     final jsonData = await get('confirmacao/ligado?compressorId=$compressorId');
     return jsonData['ligado'] as bool;
   }
-  
 }

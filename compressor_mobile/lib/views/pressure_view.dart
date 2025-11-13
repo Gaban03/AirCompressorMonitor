@@ -36,8 +36,10 @@ class _PressureViewState extends State<PressureView> {
     switch (widget.tipo) {
       case TipoPressao.arComprimido:
         return vm.pressaoArComprimido;
+
       case TipoPressao.carga:
         return vm.pressaoCarga;
+
       case TipoPressao.alivio:
         return vm.pressaoAlivio;
     }
@@ -47,8 +49,10 @@ class _PressureViewState extends State<PressureView> {
     switch (widget.tipo) {
       case TipoPressao.arComprimido:
         return 12;
+
       case TipoPressao.carga:
         return 12;
+
       case TipoPressao.alivio:
         return 10;
     }
@@ -60,6 +64,7 @@ class _PressureViewState extends State<PressureView> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final fontSize = screenWidth < 400 ? 11.0 : 13.0;
+
     final color = widget.color;
 
     return Scaffold(
@@ -99,9 +104,7 @@ class _PressureViewState extends State<PressureView> {
               labelInterval = (vm.labels.length / maxLabels).ceil();
             }
 
-            DateTime dt = DateTime.tryParse(vm.dataHora) ?? DateTime.now();
-            String dataFormatada = DateFormat('dd/MM/yyyy').format(dt);
-            String horaFormatada = DateFormat('HH:mm:ss').format(dt);
+            String horaRealApi = vm.ultimaHora;
 
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -129,14 +132,14 @@ class _PressureViewState extends State<PressureView> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            dataFormatada,
+                            DateFormat('dd/MM/yyyy').format(DateTime.now()),
                             style: GoogleFonts.orbitron(
                               color: Colors.white70,
                               fontSize: 13,
                             ),
                           ),
                           Text(
-                            horaFormatada,
+                            horaRealApi,
                             style: GoogleFonts.orbitron(
                               color: color,
                               fontWeight: FontWeight.bold,
@@ -184,17 +187,20 @@ class _PressureViewState extends State<PressureView> {
                         maximum: _maxY(),
                         ranges: <GaugeRange>[
                           GaugeRange(
-                              startValue: 0,
-                              endValue: _maxY() * 0.45,
-                              color: Colors.orange),
+                            startValue: 0,
+                            endValue: _maxY() * 0.45,
+                            color: Colors.orange,
+                          ),
                           GaugeRange(
-                              startValue: _maxY() * 0.45,
-                              endValue: _maxY() * 0.75,
-                              color: Colors.green),
+                            startValue: _maxY() * 0.45,
+                            endValue: _maxY() * 0.75,
+                            color: Colors.green,
+                          ),
                           GaugeRange(
-                              startValue: _maxY() * 0.75,
-                              endValue: _maxY(),
-                              color: Colors.red),
+                            startValue: _maxY() * 0.75,
+                            endValue: _maxY(),
+                            color: Colors.red,
+                          ),
                         ],
                         pointers: <GaugePointer>[
                           NeedlePointer(
@@ -224,22 +230,25 @@ class _PressureViewState extends State<PressureView> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       StatCard(
-                          label: 'Mínima',
-                          value: minPressao,
-                          color: Colors.blueAccent,
-                          unit: _unit()),
+                        label: 'Mínima',
+                        value: minPressao,
+                        color: Colors.blueAccent,
+                        unit: _unit(),
+                      ),
                       const SizedBox(width: 8),
                       StatCard(
-                          label: 'Média',
-                          value: avgPressao,
-                          color: Colors.orangeAccent,
-                          unit: _unit()),
+                        label: 'Média',
+                        value: avgPressao,
+                        color: Colors.orangeAccent,
+                        unit: _unit(),
+                      ),
                       const SizedBox(width: 8),
                       StatCard(
-                          label: 'Máxima',
-                          value: maxPressao,
-                          color: Colors.redAccent,
-                          unit: _unit()),
+                        label: 'Máxima',
+                        value: maxPressao,
+                        color: Colors.redAccent,
+                        unit: _unit(),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -271,7 +280,9 @@ class _PressureViewState extends State<PressureView> {
                             color: color,
                             barWidth: 3,
                             belowBarData: BarAreaData(
-                                show: true, color: color.withOpacity(0.15)),
+                              show: true,
+                              color: color.withOpacity(0.15),
+                            ),
                             dotData: FlDotData(show: false),
                           ),
                         ],
@@ -293,9 +304,10 @@ class _PressureViewState extends State<PressureView> {
                             axisNameWidget: Text(
                               'Pressão (bar)',
                               style: GoogleFonts.orbitron(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.white70),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white70,
+                              ),
                             ),
                             axisNameSize: 25,
                             sideTitles: SideTitles(
@@ -307,21 +319,20 @@ class _PressureViewState extends State<PressureView> {
                                 child: Text(
                                   value.toStringAsFixed(0),
                                   style: TextStyle(
-                                      fontSize: fontSize,
-                                      color: Colors.white60),
+                                    fontSize: fontSize,
+                                    color: Colors.white60,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           bottomTitles: AxisTitles(
-                            axisNameWidget: Padding(
-                              padding: EdgeInsets.only(top: 0),
-                              child: Text(
-                                'Horário',
-                                style: GoogleFonts.orbitron(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white70),
+                            axisNameWidget: Text(
+                              'Horário',
+                              style: GoogleFonts.orbitron(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white70,
                               ),
                             ),
                             sideTitles: SideTitles(
@@ -330,11 +341,13 @@ class _PressureViewState extends State<PressureView> {
                               interval: 1,
                               getTitlesWidget: (value, meta) {
                                 final index = (value - minX).round();
+
                                 if (index < 0 ||
                                     index >= vm.labels.length ||
                                     index % labelInterval != 0) {
                                   return const SizedBox.shrink();
                                 }
+
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 4),
                                   child: Text(
@@ -350,14 +363,18 @@ class _PressureViewState extends State<PressureView> {
                             ),
                           ),
                           rightTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                           topTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
                         borderData: FlBorderData(
                           show: true,
                           border: Border.all(
-                              color: color.withOpacity(0.6), width: 1),
+                            color: color.withOpacity(0.6),
+                            width: 1,
+                          ),
                         ),
                       ),
                     ),

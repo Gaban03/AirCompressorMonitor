@@ -1,7 +1,7 @@
 part of '_view_model_lib.dart';
 
 class CompressorDadosViewModel extends BaseViewModel {
-  static const int maxPoints = 4;
+  static const int maxPoints = 5;
 
   final CompressorService _service = getIt<CompressorService>();
 
@@ -18,16 +18,20 @@ class CompressorDadosViewModel extends BaseViewModel {
   double pressaoArComprimido = 0;
   double pressaoCarga = 0;
 
-  String dataHora = '';
-  double tempo = 0;
   String mensagemEstado = 'Carregando...';
   bool ligado = false;
+
+  double ultimaTemperatura = 0;
+  double ultimaPressao = 0;
+  String ultimaHora = "--:--:--";
 
   double minY = 0;
   double maxY = 100;
 
   Timer? _timer;
   Timer? _estadoTimer;
+
+  double tempo = 0;
 
   void startTemperature(TipoTemperatura tipo) {
     stopFetching();
@@ -38,43 +42,87 @@ class CompressorDadosViewModel extends BaseViewModel {
     switch (tipo) {
       case TipoTemperatura.ambiente:
         minY = 0;
-        maxY = 35;
-        fetchDadosRoomTemperature();
+        maxY = 60;
+        _fetchDashboardTemperatura((d) => d.temperaturaAmbiente.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosRoomTemperature(),
+          (_) => _fetchDashboardTemperatura(
+            (d) => d.temperaturaAmbiente.toDouble(),
+          ),
         );
         break;
 
       case TipoTemperatura.arComprimido:
         minY = 0;
         maxY = 90;
-        fetchDadosCompressedAirTemperature();
+        _fetchDashboardTemperatura((d) => d.temperaturaArComprimido.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosCompressedAirTemperature(),
+          (_) => _fetchDashboardTemperatura(
+            (d) => d.temperaturaArComprimido.toDouble(),
+          ),
         );
         break;
 
       case TipoTemperatura.orvalho:
         minY = 0;
         maxY = 15;
-        fetchDadosDewTemperature();
+        _fetchDashboardTemperatura((d) => d.temperaturaOrvalho.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosDewTemperature(),
+          (_) => _fetchDashboardTemperatura(
+            (d) => d.temperaturaOrvalho.toDouble(),
+          ),
         );
         break;
 
       case TipoTemperatura.oleo:
         minY = 0;
         maxY = 80;
-        fetchDadosOilTemperature();
+        _fetchDashboardTemperatura((d) => d.temperaturaOleo.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosOilTemperature(),
+          (_) => _fetchDashboardTemperatura(
+            (d) => d.temperaturaOleo.toDouble(),
+          ),
         );
         break;
+    }
+  }
+
+  Future<void> _fetchDashboardTemperatura(
+    double Function(CompressorDados d) selector,
+  ) async {
+    try {
+      setLoading(true);
+
+      final lista = await _service.fetchDadosDashboard();
+      final ordered = lista.reversed.toList();
+
+      temperaturaSpots.clear();
+      labels.clear();
+      tempo = 0;
+
+      for (final dado in ordered) {
+        tempo += 1;
+        final value = selector(dado);
+
+        temperaturaSpots.add(FlSpot(tempo, value));
+        labels.add(_formatHora(dado.dataHora.toString()));
+      }
+
+      if (lista.isNotEmpty) {
+        final ultimo = lista.first;
+
+        ultimaTemperatura = selector(ultimo);
+        ultimaHora = _formatHora(ultimo.dataHora.toString());
+      }
+
+      notifyListeners();
+    } catch (e) {
+      setError(e.toString());
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -88,32 +136,82 @@ class CompressorDadosViewModel extends BaseViewModel {
       case TipoPressao.arComprimido:
         minY = 0;
         maxY = 10;
-        fetchDadosCompressedAirPressure();
+        _fetchDashboardPressao((d) => d.pressaoArComprimido.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosCompressedAirPressure(),
+          (_) => _fetchDashboardPressao(
+            (d) => d.pressaoArComprimido.toDouble(),
+          ),
         );
         break;
 
       case TipoPressao.carga:
         minY = 0;
         maxY = 8;
-        fetchDadosPressureLoad();
+        _fetchDashboardPressao((d) => d.pressaoCarga.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosPressureLoad(),
+          (_) => _fetchDashboardPressao(
+            (d) => d.pressaoCarga.toDouble(),
+          ),
         );
         break;
 
       case TipoPressao.alivio:
         minY = 0;
         maxY = 12;
-        fetchDadosPressureRelief();
+        _fetchDashboardPressao((d) => d.pressaoAlivio.toDouble());
         _timer = Timer.periodic(
           const Duration(seconds: 20),
-          (_) => fetchDadosPressureRelief(),
+          (_) => _fetchDashboardPressao(
+            (d) => d.pressaoAlivio.toDouble(),
+          ),
         );
         break;
+    }
+  }
+
+  Future<void> _fetchDashboardPressao(
+    double Function(CompressorDados d) selector,
+  ) async {
+    try {
+      setLoading(true);
+
+      final lista = await _service.fetchDadosDashboard();
+      final ordered = lista.reversed.toList();
+
+      pressaoSpots.clear();
+      labels.clear();
+      tempo = 0;
+
+      for (final dado in ordered) {
+        tempo += 1;
+        final value = selector(dado);
+
+        pressaoSpots.add(FlSpot(tempo, value));
+        labels.add(_formatHora(dado.dataHora.toString()));
+      }
+
+      if (lista.isNotEmpty) {
+        final ultimo = lista.first;
+        final ultimoValor = selector(ultimo);
+
+        if (selector(ultimo) == ultimo.pressaoArComprimido.toDouble()) {
+          pressaoArComprimido = ultimoValor;
+        } else if (selector(ultimo) == ultimo.pressaoCarga.toDouble()) {
+          pressaoCarga = ultimoValor;
+        } else if (selector(ultimo) == ultimo.pressaoAlivio.toDouble()) {
+          pressaoAlivio = ultimoValor;
+        }
+
+        ultimaHora = _formatHora(ultimo.dataHora.toString());
+      }
+
+      notifyListeners();
+    } catch (e) {
+      setError(e.toString());
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -125,75 +223,8 @@ class CompressorDadosViewModel extends BaseViewModel {
     );
   }
 
-  void stopFetching() => _timer?.cancel();
-  void stopMonitoringEstado() => _estadoTimer?.cancel();
-
-  Future<void> fetchDadosRoomTemperature() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.temperaturaAmbiente.toDouble();
-        },
-        (v) => temperaturaAmbiente = v,
-        temperaturaSpots,
-      );
-
-  Future<void> fetchDadosCompressedAirTemperature() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.temperaturaArComprimido.toDouble();
-        },
-        (v) => temperaturaArComprimido = v,
-        temperaturaSpots,
-      );
-
-  Future<void> fetchDadosDewTemperature() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.temperaturaOrvalho.toDouble();
-        },
-        (v) => temperaturaOrvalho = v,
-        temperaturaSpots,
-      );
-
-  Future<void> fetchDadosOilTemperature() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.temperaturaOleo.toDouble();
-        },
-        (v) => temperaturaOleo = v,
-        temperaturaSpots,
-      );
-
-  Future<void> fetchDadosCompressedAirPressure() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.pressaoArComprimido.toDouble();
-        },
-        (v) => pressaoArComprimido = v,
-        pressaoSpots,
-      );
-
-  Future<void> fetchDadosPressureLoad() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.pressaoCarga.toDouble();
-        },
-        (v) => pressaoCarga = v,
-        pressaoSpots,
-      );
-
-  Future<void> fetchDadosPressureRelief() async => _fetchData(
-        () async {
-          final d = await _service.fetchDados();
-          return d.pressaoAlivio.toDouble();
-        },
-        (v) => pressaoAlivio = v,
-        pressaoSpots,
-      );
-
   Future<void> fetchEstadoCompressor() async {
     try {
-      clearError();
       final dados = await _service.fetchDados();
       mensagemEstado = dados.estado;
       ligado = dados.ligado;
@@ -201,56 +232,19 @@ class CompressorDadosViewModel extends BaseViewModel {
     } catch (e) {
       mensagemEstado = 'Erro';
       setError(e.toString());
-      notifyListeners();
-    }
-  }
-
-  Future<void> _fetchData(
-    Future<double> Function() getValue,
-    void Function(double) setValue,
-    List<FlSpot> targetSpots,
-  ) async {
-    try {
-      setLoading(true);
-      clearError();
-
-      final value = await getValue();
-      setValue(value);
-      tempo += 1;
-
-      final newSpots = List<FlSpot>.from(targetSpots)
-        ..add(FlSpot(tempo, value));
-      final newLabels = List<String>.from(labels)
-        ..add(_formatHora(DateTime.now().toString()));
-
-      if (newSpots.length > maxPoints) {
-        newSpots.removeAt(0);
-        newLabels.removeAt(0);
-      }
-
-      if (targetSpots == temperaturaSpots) {
-        temperaturaSpots = newSpots;
-      } else {
-        pressaoSpots = newSpots;
-      }
-
-      labels = newLabels;
-      notifyListeners();
-    } catch (e) {
-      setError(e.toString());
-    } finally {
-      setLoading(false);
     }
   }
 
   String _formatHora(String dataHora) {
     try {
-      if (dataHora.length >= 19) return dataHora.substring(11, 19);
-      return dataHora;
+      return dataHora.substring(11, 19);
     } catch (_) {
       return dataHora;
     }
   }
+
+  void stopFetching() => _timer?.cancel();
+  void stopMonitoringEstado() => _estadoTimer?.cancel();
 
   @override
   void dispose() {
