@@ -10,48 +10,48 @@ class StatCard extends StatelessWidget {
     super.key,
     required this.label,
     required this.value,
+    required this.unit,
     required this.color,
-    this.unit = '',
   });
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 6,
-              offset: Offset(2, 4),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.6), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: GoogleFonts.poppins(
+              color: Colors.white70,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1.2,
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            '${value.toStringAsFixed(1)} $unit',
+            style: GoogleFonts.orbitron(
+              color: color,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
             ),
-            const SizedBox(height: 6),
-            Text(
-              '${value.toStringAsFixed(1)} $unit',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -15,20 +15,24 @@ class Content extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      drawer: const SideMenu(),
-      appBar: CustomAppBar(
-        title: title,
-      ),
-      body: SizedBox(
+      backgroundColor: Colors.transparent,
+      drawer: SideMenu(parentContext: context),
+      appBar: CustomAppBar(title: title),
+      body: Container(
         width: size.width,
         height: size.height,
-        child: Stack(
-          children: [
-            Builder(builder: (ctx) {
-              return body;
-            }),
-          ],
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFF1E1E1E),
+              Color(0xFF2B2B2B),
+              Color(0xFF3A3A3A),
+            ],
+          ),
         ),
+        child: body,
       ),
     );
   }

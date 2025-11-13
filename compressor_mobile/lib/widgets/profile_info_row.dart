@@ -14,29 +14,38 @@ class ProfileInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ProfileInfoItem> items = [
+    final items = [
       ProfileInfoItem("Posts", posts),
-      ProfileInfoItem("Followers", followers),
-      ProfileInfoItem("Following", following),
+      ProfileInfoItem("Seguidores", followers),
+      ProfileInfoItem("Seguindo", following),
     ];
 
     return Container(
-      height: 80,
-      constraints: const BoxConstraints(maxWidth: 400),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.25), width: 1),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: items
-            .map(
-              (item) => Expanded(
-                child: Row(
-                  children: [
-                    if (items.indexOf(item) != 0) const VerticalDivider(),
-                    Expanded(child: _singleItem(context, item)),
-                  ],
-                ),
-              ),
-            )
-            .toList(),
+        children: items.map((item) {
+          final index = items.indexOf(item);
+          return Expanded(
+            child: Row(
+              children: [
+                if (index != 0)
+                  Container(
+                    width: 1,
+                    height: 40,
+                    color: Colors.redAccent.withOpacity(0.2),
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                  ),
+                Expanded(child: _singleItem(context, item)),
+              ],
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -44,14 +53,23 @@ class ProfileInfoRow extends StatelessWidget {
   Widget _singleItem(BuildContext context, ProfileInfoItem item) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              item.value.toString(),
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          Text(
+            item.value.toString(),
+            style: GoogleFonts.orbitron(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.redAccent,
             ),
           ),
-          Text(item.title, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 4),
+          Text(
+            item.title.toUpperCase(),
+            style: GoogleFonts.openSans(
+              fontSize: 12,
+              color: Colors.white60,
+              letterSpacing: 1,
+            ),
+          ),
         ],
       );
 }

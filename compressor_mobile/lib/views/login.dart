@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
@@ -29,12 +30,6 @@ class _LoginState extends State<Login> {
                   image: AssetImage("assets/images/senai-escola.jpg"),
                   fit: BoxFit.cover,
                 ),
-              ),
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-              child: Container(
-                color: Colors.black.withOpacity(0.4),
               ),
             ),
             SafeArea(
@@ -48,41 +43,51 @@ class _LoginState extends State<Login> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            "assets/images/senai.png",
-                            width: mediaSize.width * 0.6,
+                          Hero(
+                            tag: "senai-logo",
+                            child: Image.asset(
+                              "assets/images/senai.png",
+                              width: mediaSize.width * 0.55,
+                            ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 18),
                           Text(
-                            "Monitoramento Compressor",
+                            "Monitoramento do Compressor",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.poppins(
-                              fontSize: 26,
+                            style: GoogleFonts.orbitron(
+                              fontSize: 24,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                               shadows: [
                                 Shadow(
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.4),
+                                  blurRadius: 8,
+                                  color: Colors.black.withOpacity(0.6),
                                   offset: const Offset(0, 3),
-                                )
+                                ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 36),
-
-                      // Card do login
+                      const SizedBox(height: 40),
                       Container(
+                        width: double.infinity,
                         padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.95),
-                          borderRadius: BorderRadius.circular(20),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF1E1E1E),
+                              Color(0xFF2B2B2B),
+                              Color(0xFF3A3A3A),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(22),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 15,
+                              color: Colors.black.withOpacity(0.4),
+                              blurRadius: 20,
                               offset: const Offset(0, 8),
                             ),
                           ],
@@ -116,9 +121,7 @@ class _LoginState extends State<Login> {
                                 isPassword: true,
                                 obscureText: visivel,
                                 onToggleVisibility: () {
-                                  setState(() {
-                                    visivel = !visivel;
-                                  });
+                                  setState(() => visivel = !visivel);
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -130,7 +133,7 @@ class _LoginState extends State<Login> {
                                   return null;
                                 },
                               ),
-                              const SizedBox(height: 28),
+                              const SizedBox(height: 30),
                               ConstrainedBox(
                                 constraints:
                                     const BoxConstraints(maxWidth: 400),
@@ -138,26 +141,26 @@ class _LoginState extends State<Login> {
                                   width: double.infinity,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFFD32F2F),
+                                      backgroundColor: Colors.redAccent,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
+                                        borderRadius: BorderRadius.circular(16),
                                       ),
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 14),
-                                      elevation: 5,
+                                          vertical: 15),
+                                      elevation: 8,
                                     ),
                                     onPressed: () async {
                                       if (formKey.currentState!.validate()) {
                                         await AuthService().signin(
-                                          email: userEmail.text,
-                                          password: userPassword.text,
+                                          email: userEmail.text.trim(),
+                                          password: userPassword.text.trim(),
                                           context: context,
                                         );
                                       }
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       "Entrar",
-                                      style: TextStyle(
+                                      style: GoogleFonts.poppins(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.white,
@@ -167,14 +170,15 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 20),
                               TextButton(
                                 onPressed: () {},
-                                child: const Text(
+                                child: Text(
                                   "Não tem cadastro? Crie uma conta",
-                                  style: TextStyle(
+                                  style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.black87,
+                                    color: Colors.white70,
+                                    decoration: TextDecoration.underline,
                                   ),
                                 ),
                               ),
@@ -186,14 +190,14 @@ class _LoginState extends State<Login> {
                                 },
                                 borderRadius: BorderRadius.circular(30),
                                 child: Container(
-                                  width: 58,
-                                  height: 58,
+                                  width: 56,
+                                  height: 56,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.15),
+                                        color: Colors.black.withOpacity(0.3),
                                         blurRadius: 10,
                                         offset: const Offset(0, 5),
                                       ),

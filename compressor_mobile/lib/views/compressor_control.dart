@@ -8,159 +8,210 @@ class CompressorControl extends StatefulWidget {
 }
 
 class _CompressorControlState extends State<CompressorControl> {
-  bool isTapped = false;
-  bool ligado = false;
-  String? dataEstado;
+  late final CompressorControlViewModel vm = CompressorControlViewModel();
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   carregarEstado();
-  // }
+  void initState() {
+    super.initState();
+    vm.carregarEstadoInicial();
+    vm.startMonitoringStatus();
+  }
 
-  // Future<void> carregarEstado() async {
-  //   try {
-  //     final estadoBobina = await recebeEstado();
-  //     bool estado = estadoBobina['bobina'];
-  //     String data = estadoBobina['data'];
-  //     setState(() {
-  //       ligado = estado;
-  //       dataEstado = data;
-  //     });
-  //   } catch (e) {
-  //     print('Erro ao carregar estado: $e');
-  //   }
-  // }
+  @override
+  void dispose() {
+    vm.stopMonitoringStatus();
+    super.dispose();
+  }
 
   Future<bool> _onWillPop() async {
-    // Navegar para a HomeView substituindo a tela atual
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const HomeView()),
     );
-    // Impedir a navegação para a tela anterior
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-          body: Content(
-              title: "SENAI",
-              body: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 20,
-                ),
-                child: Column(
-                  children: [
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .08,
-                    ),
-
-                    Text(
-                      "Controle do Compressor",
-                      style: TextStyle(
-                          fontSize: 25,
+    return ChangeNotifierProvider.value(
+      value: vm,
+      child: Consumer<CompressorControlViewModel>(
+        builder: (context, vm, _) {
+          return WillPopScope(
+            onWillPop: _onWillPop,
+            child: Scaffold(
+              backgroundColor: const Color(0xFF121212),
+              body: Content(
+                title: "SENAI",
+                body: SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: screenHeight * 0.04),
+                      Text(
+                        "Controle do Compressor",
+                        style: GoogleFonts.orbitron(
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .05,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 30.0, horizontal: 0),
-                      child: Text(
-                        dataEstado != null
-                            ? 'Última atividade: $dataEstado'
-                            : 'Carregando data...',
-                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                      ),
-                    ),
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 500),
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: ligado ? Colors.red : Colors.grey.shade400,
-                        boxShadow: ligado
-                            ? [
-                                BoxShadow(
-                                  color: Colors.redAccent.withOpacity(0.6),
-                                  blurRadius: 20,
-                                  spreadRadius: 5,
-                                ),
-                              ]
-                            : [],
-                      ),
-                      child: Icon(
-                        ligado ? Icons.power : Icons.power_off,
-                        size: 100,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .02,
-                    ),
-                    Text(
-                      ligado ? 'Compressor ligado' : 'Compressor desligado',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: ligado ? Colors.redAccent : Colors.grey,
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .03,
-                    ),
-                    Center(
-                        child: Container(
-                      width: MediaQuery.of(context).size.width * .5,
-                      height: 60,
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(2)),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ligado ? Colors.red : Colors.green,
-                          elevation: 8,
-                          shadowColor: Colors.black.withOpacity(0.9),
+                          color: Colors.white,
+                          letterSpacing: 1.2,
                         ),
-                        onPressed: () async {
-                          // adds a delay to prevent spamming
-                          // if (!isTapped) {
-                          //   try {
-                          //     isTapped = true;
-                          //     final novoEstado = !ligado;
-                          //     await enviarEstado(novoEstado);
-
-                          //     final resultado = await recebeEstado();
-                          //     bool bobinaEstado = resultado['bobina'];
-                          //     String novaData = resultado['data'];
-                          //     setState(() {
-                          //       ligado = bobinaEstado;
-                          //       dataEstado = novaData;
-                          //     });
-                          //     await Future.delayed(
-                          //         const Duration(milliseconds: 5000));
-                          //     isTapped = false;
-                          //   } catch (e) {
-                          //     print('Erro ao enviar estado $e');
-                          //   }
-                          // }
-                        },
-                        child: Text(ligado ? 'Desligar' : 'Ligar',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 30)),
                       ),
-                    )),
-                  ],
+                      const SizedBox(height: 30),
+                      Text(
+                        vm.dataEstado != null
+                            ? 'Última atualização: ${vm.dataEstado}'
+                            : 'Obtendo status...',
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeInOut,
+                        width: 180,
+                        height: 180,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: vm.ligado
+                              ? const LinearGradient(
+                                  colors: [
+                                    Color(0xFFD32F2F),
+                                    Color(0xFF8B0000)
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                )
+                              : LinearGradient(
+                                  colors: [
+                                    Colors.grey.shade700,
+                                    Colors.grey.shade900,
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                          boxShadow: vm.ligado
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.redAccent.withOpacity(0.6),
+                                    blurRadius: 25,
+                                    spreadRadius: 6,
+                                  ),
+                                ]
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black54,
+                                    blurRadius: 12,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Icon(
+                              vm.ligado
+                                  ? Icons.power_settings_new
+                                  : Icons.power_off,
+                              size: 100,
+                              color: Colors.white,
+                            ),
+                            if (vm.isLoading)
+                              const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 3,
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      Text(
+                        vm.ligado
+                            ? 'Compressor ligado'
+                            : 'Compressor desligado',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: vm.ligado ? Colors.redAccent : Colors.white70,
+                        ),
+                      ),
+                      const SizedBox(height: 45),
+                      SizedBox(
+                        width: screenWidth * 0.6,
+                        height: 58,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: vm.ligado
+                                ? const Color(0xFFD32F2F)
+                                : const Color(0xFF2E7D32),
+                            elevation: 10,
+                            shadowColor: Colors.black54,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          onPressed: vm.isLoading
+                              ? null
+                              : () async {
+                                  await vm.toggleCompressor();
+
+                                  if (context.mounted) {
+                                    AppSnackBar.show(
+                                      context,
+                                      message: vm.ligado
+                                          ? "Compressor ligado com sucesso!"
+                                          : "Compressor desligado com sucesso!",
+                                      type: vm.ligado
+                                          ? SnackType.success
+                                          : SnackType.error,
+                                    );
+                                  }
+                                },
+                          child: vm.isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 3,
+                                )
+                              : Text(
+                                  vm.ligado ? 'Desligar' : 'Ligar',
+                                  style: GoogleFonts.orbitron(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.2,
+                                  ),
+                                ),
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      if (vm.hasError)
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            vm.errorMessage ?? 'Erro desconhecido',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.poppins(
+                              color: Colors.redAccent,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ))),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+    - 'API-Compressor/**'
   workflow_dispatch:
 
 jobs:
@@ -14,8 +16,8 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Deploy via Podman Compose
+      - name: Deploy via Docker Compose
         run: |
           cd ./API-Compressor
-          podman-compose down -v
-          podman-compose up -d --build
+          docker compose down
+          docker compose up -d --build

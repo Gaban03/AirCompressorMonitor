@@ -8,6 +8,8 @@ class BaseViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
+  bool get hasError => _errorMessage != null && _errorMessage!.isNotEmpty;
+
   void setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
