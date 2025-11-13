@@ -123,7 +123,7 @@ class _AboutState extends State<About> {
               const SizedBox(height: 25),
 
               // --- Lista dos devs ---
-              ...developers.map((dev) => _buildDeveloperCard(dev)).toList(),
+              ...developers.map((dev) => _buildDeveloperCard(dev)),
 
               const SizedBox(height: 40),
               Center(

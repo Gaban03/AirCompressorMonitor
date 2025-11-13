@@ -56,6 +56,20 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
                 HomeMenuItem(
+                  title: "Controle do compressor",
+                  subtitle: "Liga e desliga o compressor",
+                  icon: Icons.control_point_rounded,
+                  onPressed: () async {
+                    if (context.mounted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CompressorControl(),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                HomeMenuItem(
                   title: "Temp. Ambiente",
                   subtitle: "Dados da temperatura ambiente do compressor",
                   icon: Icons.thermostat,
@@ -66,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
                         tipo: TipoTemperatura.ambiente,
                         color: Colors.redAccent,
                         minY: 0,
-                        maxY: 35,
+                        maxY: 60,
                       ),
                     ),
                   ),
@@ -119,20 +133,6 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                   ),
-                ),
-                HomeMenuItem(
-                  title: "Controle do compressor",
-                  subtitle: "Liga e desliga o compressor",
-                  icon: Icons.control_point_rounded,
-                  onPressed: () async {
-                    if (context.mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const CompressorControl(),
-                        ),
-                      );
-                    }
-                  },
                 ),
                 HomeMenuItem(
                   title: "Pressão Ar Comprimido",
