@@ -36,19 +36,6 @@ class _TemperatureViewState extends State<TemperatureView> {
     super.dispose();
   }
 
-  double _currentTemp() {
-    switch (widget.tipo) {
-      case TipoTemperatura.ambiente:
-        return vm.temperaturaAmbiente;
-      case TipoTemperatura.arComprimido:
-        return vm.temperaturaArComprimido;
-      case TipoTemperatura.orvalho:
-        return vm.temperaturaOrvalho;
-      case TipoTemperatura.oleo:
-        return vm.temperaturaOleo;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -89,9 +76,10 @@ class _TemperatureViewState extends State<TemperatureView> {
               labelInterval = (vm.labels.length / maxLabels).ceil();
             }
 
-            DateTime dt = DateTime.tryParse(vm.dataHora) ?? DateTime.now();
+            DateTime dt = DateTime.now();
             String dataFormatada = DateFormat('dd/MM/yyyy').format(dt);
-            String horaFormatada = DateFormat('HH:mm:ss').format(dt);
+
+            String horaFormatada = vm.ultimaHora;
 
             final color = widget.color;
 
@@ -159,7 +147,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                       ],
                     ),
                     child: Text(
-                      '${_currentTemp().toStringAsFixed(2)} °C',
+                      '${vm.ultimaTemperatura.toStringAsFixed(2)} °C',
                       style: GoogleFonts.orbitron(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
@@ -220,7 +208,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                             color: color,
                             barWidth: 3,
                             belowBarData: BarAreaData(
-                                show: true, color: color.withOpacity(0.15)),
+                              show: true,
+                              color: color.withOpacity(0.15),
+                            ),
                             dotData: FlDotData(show: false),
                           ),
                         ],
@@ -243,9 +233,10 @@ class _TemperatureViewState extends State<TemperatureView> {
                             axisNameWidget: Text(
                               'Temperatura (°C)',
                               style: GoogleFonts.orbitron(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.white70),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                                color: Colors.white70,
+                              ),
                             ),
                             axisNameSize: 25,
                             sideTitles: SideTitles(
@@ -257,21 +248,23 @@ class _TemperatureViewState extends State<TemperatureView> {
                                 child: Text(
                                   value.toStringAsFixed(0),
                                   style: TextStyle(
-                                      fontSize: fontSize,
-                                      color: Colors.white60),
+                                    fontSize: fontSize,
+                                    color: Colors.white60,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           bottomTitles: AxisTitles(
                             axisNameWidget: Padding(
-                              padding: EdgeInsets.only(top: 0),
+                              padding: const EdgeInsets.only(top: 0),
                               child: Text(
                                 'Horário',
                                 style: GoogleFonts.orbitron(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: Colors.white70),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  color: Colors.white70,
+                                ),
                               ),
                             ),
                             sideTitles: SideTitles(
@@ -307,7 +300,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                         borderData: FlBorderData(
                           show: true,
                           border: Border.all(
-                              color: color.withOpacity(0.6), width: 1),
+                            color: color.withOpacity(0.6),
+                            width: 1,
+                          ),
                         ),
                         lineTouchData: LineTouchData(
                           enabled: true,
@@ -325,8 +320,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                                 return LineTooltipItem(
                                   'Hora: $time\nTemp: ${spot.y.toStringAsFixed(2)} °C',
                                   const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 );
                               }).toList();
                             },

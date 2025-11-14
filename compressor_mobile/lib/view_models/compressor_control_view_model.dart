@@ -29,7 +29,7 @@ class CompressorControlViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      setError('Erro ao obter status: $e');
+      setError('Erro ao obter status!');
     }
   }
 

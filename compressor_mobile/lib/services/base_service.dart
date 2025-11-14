@@ -13,7 +13,6 @@ class ApiException implements Exception {
 }
 
 abstract class BaseService {
-
   final String baseUrl;
 
   final Map<String, String> defaultHeaders = const {
@@ -23,11 +22,12 @@ abstract class BaseService {
 
   BaseService({required this.baseUrl});
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<dynamic> get(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.get(url, headers: defaultHeaders);
       _validateResponse(response);
+
       return json.decode(response.body);
     } catch (e) {
       _handleError(e);
