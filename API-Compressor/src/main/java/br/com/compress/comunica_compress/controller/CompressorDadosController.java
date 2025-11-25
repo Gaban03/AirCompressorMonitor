@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
-import br.com.compress.comunica_compress.dto.CompressorEstadoDTO;
+import br.com.compress.comunica_compress.dto.FalhasDTO;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.service.CompressorDadosService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,10 +61,19 @@ public class CompressorDadosController {
                 return ResponseEntity.ok(resposta);
         }
 
-        @GetMapping("/estado")
-        public ResponseEntity<CompressorEstadoDTO> getEstado(@RequestParam Integer idCompressor) {
-                var ultimosDados = compressorDadosService.buscarUltimaLeitura(idCompressor);
-                return ResponseEntity.ok(new CompressorEstadoDTO(ultimosDados.get().getEstado()));
+        @GetMapping("/falhas")
+        public ResponseEntity<List<FalhasDTO>> listarFalhas(@RequestParam Integer idCompressor) {
+
+                List<CompressorDados> registros = compressorDadosService.buscarFalhas(idCompressor);
+
+                List<FalhasDTO> dtoList = registros.stream()
+                                .map(reg -> new FalhasDTO(
+                                                reg.getFalha().getId().toString(),
+                                                reg.getFalha().getDescricao(),
+                                                reg.getDataHora()))
+                                .toList();
+
+                return ResponseEntity.ok(dtoList);
         }
 
 }
