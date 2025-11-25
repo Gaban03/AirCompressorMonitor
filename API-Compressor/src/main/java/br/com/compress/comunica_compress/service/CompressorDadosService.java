@@ -93,4 +93,9 @@ public class CompressorDadosService {
     public List<CompressorDados> buscarDadosDashboard(Integer idCompressor) {
         return compressorDadosRepository.findTop5ByCompressorIdOrderByDataHoraDesc(idCompressor);
     }
+
+    @Transactional
+    public List<CompressorDados> buscarFalhas(Integer idCompressor) {
+        return compressorDadosRepository.findByCompressorIdAndFalhaCodigoNot(idCompressor, "0x00");
+    }
 }
