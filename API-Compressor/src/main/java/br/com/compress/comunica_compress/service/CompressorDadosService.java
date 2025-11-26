@@ -79,6 +79,11 @@ public class CompressorDadosService {
                 .orElseThrow(() -> new IllegalArgumentException("Falha " + dto.falhaId() + "não existe!"));
 
         CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha);
+
+        if(compressorDadosEntity == null){
+            throw new IllegalStateException("Falha ao converter dados para entidade. Verifique os valores de entrada.");
+        }
+
         CompressorDados saved = compressorDadosRepository.save(compressorDadosEntity);
 
         return toResponse(saved);

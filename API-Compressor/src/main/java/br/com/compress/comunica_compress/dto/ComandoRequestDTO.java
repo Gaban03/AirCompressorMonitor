@@ -1,6 +1,8 @@
 package br.com.compress.comunica_compress.dto;
 
+import org.springframework.lang.NonNull;
+
 public record ComandoRequestDTO(
-        Integer compressorId,
+        @NonNull Integer compressorId,
         Boolean comando) {
 }

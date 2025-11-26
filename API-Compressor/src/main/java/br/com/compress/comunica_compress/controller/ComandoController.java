@@ -35,6 +35,7 @@ public class ComandoController {
         @Autowired
         private EntityManager entityManager;
 
+        @SuppressWarnings("null")
         @Operation(description = "Enviar/inserir comando de liga/desliga do compressor no banco")
         @PostMapping("/comando")
         @Transactional

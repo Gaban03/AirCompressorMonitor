@@ -33,6 +33,7 @@ public class CompressorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SuppressWarnings("null")
     @GetMapping("/ligado")
     public ResponseEntity<Compressor> getEstado(@RequestParam Integer compressorId) {
         return compressorRepository.findById(compressorId)
