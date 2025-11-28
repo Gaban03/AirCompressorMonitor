@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .anyRequest().permitAll() // <---- Mudar para authenticated futuramente
                         )
                 .csrf(csrf -> csrf.disable()) // deixar disable somente para dev, para deploy
+                .cors(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
