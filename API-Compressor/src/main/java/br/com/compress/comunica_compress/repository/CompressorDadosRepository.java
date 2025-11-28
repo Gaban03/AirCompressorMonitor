@@ -12,4 +12,6 @@ public interface CompressorDadosRepository extends JpaRepository<CompressorDados
     Optional<CompressorDados> findTopByCompressorIdOrderByDataHoraDesc(Integer idCompressor);
 
     List<CompressorDados> findTop5ByCompressorIdOrderByDataHoraDesc(Integer idCompressor);
+
+    List<CompressorDados> findByCompressorIdAndFalhaIdNot(Integer idCompressor, String id);
 }

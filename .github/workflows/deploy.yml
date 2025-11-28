@@ -1,4 +1,4 @@
-name: Deploy Podman Compose
+name: Deploy Docker Compose
 
 on:
   push:

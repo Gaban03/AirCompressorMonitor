@@ -113,3 +113,24 @@ CREATE TABLE
     CONSTRAINT `fk_roles_has_usuario_roles1` FOREIGN KEY (`roles_id`) REFERENCES `compressor_db`.`roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `fk_roles_has_usuario_usuario1` FOREIGN KEY (`usuario_id`) REFERENCES `compressor_db`.`usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
   ) ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `compressor_db`.`comando_agendado`
+-- -----------------------------------------------------
+
+  CREATE TABLE
+    IF NOT EXISTS `compressor_db`.`comando_agendado` (
+    id                  INT AUTO_INCREMENT PRIMARY KEY,
+    compressor_id       INT NOT NULL,
+    comando             TINYINT(1) NOT NULL,
+    recorrencia                VARCHAR(20) NOT NULL,
+    data_hora_execucao  DATETIME NULL,
+    dia_semana          VARCHAR(20) NULL,
+    hora_execucao       TIME NULL,
+    dia_mes             INT NULL,
+    executado           TINYINT(1) NOT NULL DEFAULT 0,
+    data_hora_execucao_real     DATETIME NULL,
+    descricao           VARCHAR(255),
+    CONSTRAINT fk_cmd_agendado_compressor
+        FOREIGN KEY (compressor_id) REFERENCES compressor(id)
+);
