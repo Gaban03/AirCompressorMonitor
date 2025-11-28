@@ -1,6 +1,7 @@
 package br.com.compress.comunica_compress.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,38 @@ public class CompressorDadosService {
                 .orElseThrow(() -> new IllegalArgumentException("Falha " + dto.falhaId() + "não existe!"));
 
         CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha);
+
+        if (compressorDadosEntity == null) {
+            throw new IllegalStateException("Falha ao converter dados para entidade. Verifique os valores de entrada.");
+        }
+
+        Optional<CompressorDados> ultimosDados = compressorDadosRepository
+                .findTopByCompressorIdOrderByDataHoraDesc(dto.compressorId());
+
+        boolean dadosSemAlteracao = Objects.equals(compressorDadosEntity.getEstado(), ultimosDados.get().getEstado()) &&
+                Objects.equals(compressorDadosEntity.getFalha().getId(), ultimosDados.get().getFalha().getId()) &&
+                Double.compare(compressorDadosEntity.getPressaoAlivio(), ultimosDados.get().getPressaoAlivio()) == 0 &&
+                Double.compare(compressorDadosEntity.getPressaoArComprimido(),
+                        ultimosDados.get().getPressaoArComprimido()) == 0
+                &&
+                Double.compare(compressorDadosEntity.getPressaoCarga(), ultimosDados.get().getPressaoCarga()) == 0 &&
+                Double.compare(compressorDadosEntity.getTemperaturaAmbiente(),
+                        ultimosDados.get().getTemperaturaAmbiente()) == 0
+                &&
+                Double.compare(compressorDadosEntity.getTemperaturaArComprimido(),
+                        ultimosDados.get().getTemperaturaArComprimido()) == 0
+                &&
+                Double.compare(compressorDadosEntity.getTemperaturaOleo(), ultimosDados.get().getTemperaturaOleo()) == 0
+                &&
+                Double.compare(compressorDadosEntity.getTemperaturaOrvalho(),
+                        ultimosDados.get().getTemperaturaOrvalho()) == 0
+                &&
+                Objects.equals(compressorDadosEntity.getLigado(), ultimosDados.get().getLigado());
+
+        if (dadosSemAlteracao) {
+            return null;
+        }
+
         CompressorDados saved = compressorDadosRepository.save(compressorDadosEntity);
 
         return toResponse(saved);
@@ -96,6 +129,6 @@ public class CompressorDadosService {
 
     @Transactional
     public List<CompressorDados> buscarFalhas(Integer idCompressor) {
-        return compressorDadosRepository.findByCompressorIdAndFalhaCodigoNot(idCompressor, "0x00");
+        return compressorDadosRepository.findByCompressorIdAndFalhaIdNot(idCompressor, "0x00");
     }
 }

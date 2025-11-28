@@ -1,5 +1,7 @@
 package br.com.compress.comunica_compress.dto;
 
+import org.springframework.lang.NonNull;
+
 public record CompressorDadosRequestDTO(
                 Boolean ligado,
                 String estado,
@@ -12,6 +14,6 @@ public record CompressorDadosRequestDTO(
                 Float horaTotal,
                 Float pressaoAlivio,
                 Float pressaoCarga,
-                Integer compressorId,
-                String falhaId) {
+                @NonNull Integer compressorId,
+                @NonNull String falhaId) {
 }

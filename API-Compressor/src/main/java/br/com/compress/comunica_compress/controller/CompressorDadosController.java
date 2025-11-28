@@ -26,14 +26,20 @@ public class CompressorDadosController {
         @Autowired
         private CompressorDadosService compressorDadosService;
 
-        @Operation(description = "Enviar/inserir dados dos sensores do compressor no banco")
+        @Operation(summary = "Enviar/inserir dados dos sensores do compressor no banco")
         @PostMapping("/dados")
         public ResponseEntity<CompressorDadosResponseDTO> enviarDadosSensores(
                         @RequestBody CompressorDadosRequestDTO request) {
-                return ResponseEntity.ok(compressorDadosService.salvar(request));
+                CompressorDadosResponseDTO response = compressorDadosService.salvar(request);
+
+                if (response == null) {
+                        return ResponseEntity.noContent().build();
+                }
+
+                return ResponseEntity.ok(response);
         }
 
-        @Operation(description = "GET/recebe os dados dos sensores do compressor no banco")
+        @Operation(summary = "GET/recebe os dados dos sensores do compressor no banco")
         @GetMapping("/dados")
         public ResponseEntity<CompressorDadosResponseDTO> ultimosDadosSensores(@RequestParam Integer idCompressor) {
 
@@ -44,6 +50,7 @@ public class CompressorDadosController {
                                 .orElse(ResponseEntity.notFound().build());
         }
 
+        @Operation(summary = "Lista os ultimos 5 dados do compressor para o dashboard")
         @GetMapping("/dados-dashboard")
         public ResponseEntity<List<CompressorDadosResponseDTO>> cincoUltimosDadosSensores(
                         @RequestParam Integer idCompressor) {
@@ -61,6 +68,7 @@ public class CompressorDadosController {
                 return ResponseEntity.ok(resposta);
         }
 
+        @Operation(summary = "Lista todas as falhas do compressor")
         @GetMapping("/falhas")
         public ResponseEntity<List<FalhasDTO>> listarFalhas(@RequestParam Integer idCompressor) {
 
