@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,18 +72,22 @@ public class CompressorDadosController {
 
         @Operation(summary = "Lista todas as falhas do compressor")
         @GetMapping("/falhas")
-        public ResponseEntity<List<FalhasDTO>> listarFalhas(@RequestParam Integer idCompressor) {
+        public ResponseEntity<Page<FalhasDTO>> listarFalhas(
+                        @RequestParam Integer idCompressor,
+                        Pageable pageable) {
 
-                List<CompressorDados> registros = compressorDadosService.buscarFalhas(idCompressor);
+                Page<CompressorDados> page = compressorDadosService.buscarFalhas(idCompressor, pageable);
 
-                List<FalhasDTO> dtoList = registros.stream()
-                                .map(reg -> new FalhasDTO(
-                                                reg.getFalha().getId().toString(),
-                                                reg.getFalha().getDescricao(),
-                                                reg.getDataHora()))
-                                .toList();
+                if (page.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
 
-                return ResponseEntity.ok(dtoList);
+                Page<FalhasDTO> dtoPage = page.map(reg -> new FalhasDTO(
+                                reg.getFalha().getId().toString(),
+                                reg.getFalha().getDescricao(),
+                                reg.getDataHora()));
+
+                return ResponseEntity.ok(dtoPage);
         }
 
 }
