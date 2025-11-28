@@ -27,8 +27,7 @@ public class AgendamentoController {
 
     @PostMapping
     @Transactional
-    @Operation(summary = "Criar agendamento de comando",
-               description = "Cria um agendamento UNICO, SEMANAL ou MENSAL para ligar/desligar o compressor.")
+    @Operation(summary = "Criar agendamento de comando", description = "Cria um agendamento UNICO, SEMANAL ou MENSAL para ligar/desligar o compressor.")
     public ResponseEntity<AgendamentoResponseDTO> criar(@RequestBody @Valid AgendamentoRequestDTO dto) {
         AgendamentoResponseDTO response = agendamentoService.criar(dto);
         return ResponseEntity.ok(response);

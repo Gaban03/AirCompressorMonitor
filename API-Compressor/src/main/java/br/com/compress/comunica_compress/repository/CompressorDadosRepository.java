@@ -13,5 +13,5 @@ public interface CompressorDadosRepository extends JpaRepository<CompressorDados
 
     List<CompressorDados> findTop5ByCompressorIdOrderByDataHoraDesc(Integer idCompressor);
 
-    List<CompressorDados> findByCompressorIdAndFalhaCodigoNot(Integer idCompressor, String codigo);
+    List<CompressorDados> findByCompressorIdAndFalhaIdNot(Integer idCompressor, String id);
 }
