@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
@@ -128,7 +130,7 @@ public class CompressorDadosService {
     }
 
     @Transactional
-    public List<CompressorDados> buscarFalhas(Integer idCompressor) {
-        return compressorDadosRepository.findByCompressorIdAndFalhaIdNot(idCompressor, "0x00");
+    public Page<CompressorDados> buscarFalhas(Integer idCompressor, Pageable pageable) {
+        return compressorDadosRepository.findByCompressorIdAndFalhaIdNot(idCompressor, "0x00", pageable);
     }
 }
