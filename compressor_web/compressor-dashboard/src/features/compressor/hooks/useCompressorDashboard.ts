@@ -6,7 +6,7 @@ import {
   getDadosDashboard,
   getFalhas,
 } from "../api/compressorApi";
-import {
+import type {
   ComandoResponseDTO,
   Compressor,
   CompressorDadosResponseDTO,
