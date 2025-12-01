@@ -16,7 +16,7 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Deploy via Docker Compose
+      - name: Deploy API via Docker Compose
         run: |
           cd ./API-Compressor
           docker compose build --no-cache
