@@ -1,0 +1,23 @@
+name: Deploy API via Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+    - 'API-Compressor/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy via Docker Compose
+        run: |
+          cd ./API-Compressor
+          docker compose build --no-cache
+          docker compose up -d
