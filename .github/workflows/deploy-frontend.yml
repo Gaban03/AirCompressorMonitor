@@ -1,23 +1,24 @@
-name: Deploy Docker Compose
+name: Deploy Frontend via Docker Compose
 
 on:
   push:
     branches:
       - main
     paths:
-    - 'API-Compressor/**'
+      - 'compressor_web/compressor-dashboard/**'
   workflow_dispatch:
 
 jobs:
-  deploy:
+  deploy-frontend:
     runs-on: self-hosted
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Deploy via Docker Compose
+      - name: Deploy frontend via Docker Compose
+        working-directory: ./compressor_web/compressor-dashboard
         run: |
-          cd ./API-Compressor
+          docker compose down
           docker compose build --no-cache
           docker compose up -d
