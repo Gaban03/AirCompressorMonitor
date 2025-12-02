@@ -24,7 +24,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         return Colors.orangeAccent;
       case 'ALIVIO':
         return Colors.blueAccent;
-      case 'ENCARGA':
+      case 'EMCARGA':
         return Colors.greenAccent;
       case 'STANDBY':
         return Colors.amberAccent;
@@ -173,46 +173,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
 
-                // 🔹 Ícone de Notificações
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
                     IconButton(
-                      onPressed: onNotificationsTap,
                       icon: const FaIcon(
-                        FontAwesomeIcons.bell,
+                        FontAwesomeIcons.warning,
                         color: Colors.white,
-                        size: 22,
+                        size: 25,
                       ),
-                      tooltip: 'Notificações',
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const CompressorFalhasView()),
+                      ),
+                      tooltip: 'Falhas',
                     ),
-                    if (notificationCount > 0)
-                      Positioned(
-                        right: 6,
-                        top: 6,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            color: Colors.redAccent,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.redAccent,
-                                blurRadius: 6,
-                                spreadRadius: 1,
-                              ),
-                            ],
-                          ),
-                          child: Text(
-                            '$notificationCount',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
                   ],
                 ),
               ],

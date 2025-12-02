@@ -19,13 +19,11 @@ class _ConfigIpViewState extends State<ConfigIpView> {
   }
 
   @override
-  void dispose() {
-    vm.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final wp = context.wp;
+    final hp = context.hp;
+    final rf = context.rf;
+
     return AnimatedBuilder(
       animation: vm,
       builder: (_, __) {
@@ -36,14 +34,15 @@ class _ConfigIpViewState extends State<ConfigIpView> {
             body: Content(
               title: "SENAI",
               body: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
+                padding: EdgeInsets.symmetric(
+                  horizontal: wp(5),
+                  vertical: hp(3),
+                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 16),
+                      SizedBox(height: hp(2)),
                       CustomTextField(
                         controller: vm.ipController,
                         label: "Endereço IP",
@@ -51,7 +50,7 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                         prefixIcon: Icons.language,
                         validator: vm.validarIP,
                       ),
-                      const SizedBox(height: 22),
+                      SizedBox(height: hp(2.5)),
                       CustomTextField(
                         controller: vm.portAPIController,
                         label: "Porta da API",
@@ -59,69 +58,61 @@ class _ConfigIpViewState extends State<ConfigIpView> {
                         prefixIcon: Icons.api,
                         validator: vm.validarPorta,
                       ),
-                      const SizedBox(height: 36),
+                      SizedBox(height: hp(4)),
                       SizedBox(
-                        height: 52,
+                        height: hp(7),
+                        width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFD32F2F),
-                            foregroundColor: Colors.white,
-                            elevation: 10,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            shadowColor: Colors.redAccent.withOpacity(0.4),
                           ),
                           onPressed: vm.isLoading
                               ? null
                               : () async {
-                                  if (_formKey.currentState?.validate() != true)
+                                  if (!_formKey.currentState!.validate())
                                     return;
 
                                   await vm.salvarDados();
 
-                                  if (!vm.hasError) {
-                                    AppSnackBar.show(
-                                      context,
-                                      message:
-                                          "Configurações salvas com sucesso!",
-                                      type: SnackType.success,
-                                    );
-                                  } else {
-                                    AppSnackBar.show(
-                                      context,
-                                      message: vm.errorMessage ??
-                                          "Falha ao salvar as configurações",
-                                      type: SnackType.error,
-                                    );
-                                  }
+                                  AppSnackBar.show(
+                                    context,
+                                    message: vm.hasError
+                                        ? vm.errorMessage ?? "Erro ao salvar"
+                                        : "Configurações salvas!",
+                                    type: vm.hasError
+                                        ? SnackType.error
+                                        : SnackType.success,
+                                  );
                                 },
                           child: vm.isLoading
-                              ? const SizedBox(
-                                  width: 26,
-                                  height: 26,
-                                  child: CircularProgressIndicator(
+                              ? SizedBox(
+                                  width: wp(7),
+                                  height: wp(7),
+                                  child: const CircularProgressIndicator(
                                     color: Colors.white,
                                     strokeWidth: 3,
                                   ),
                                 )
                               : Text(
-                                  'Salvar Configurações',
+                                  "Salvar Configurações",
                                   style: GoogleFonts.orbitron(
-                                    fontSize: 17,
+                                    fontSize: rf(18),
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w600,
-                                    letterSpacing: 1.1,
                                   ),
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      SizedBox(height: hp(5)),
                       NetworkInfoCard(
                         connectionType: vm.connectionType,
                         ssid: vm.ssid,
                         localIP: vm.localIP,
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: hp(2)),
                     ],
                   ),
                 ),
