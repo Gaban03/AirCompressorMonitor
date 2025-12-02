@@ -36,10 +36,8 @@ class _PressureViewState extends State<PressureView> {
     switch (widget.tipo) {
       case TipoPressao.arComprimido:
         return vm.pressaoArComprimido;
-
       case TipoPressao.carga:
         return vm.pressaoCarga;
-
       case TipoPressao.alivio:
         return vm.pressaoAlivio;
     }
@@ -49,10 +47,8 @@ class _PressureViewState extends State<PressureView> {
     switch (widget.tipo) {
       case TipoPressao.arComprimido:
         return 12;
-
       case TipoPressao.carga:
         return 12;
-
       case TipoPressao.alivio:
         return 10;
     }
@@ -62,9 +58,6 @@ class _PressureViewState extends State<PressureView> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final fontSize = screenWidth < 400 ? 11.0 : 13.0;
-
     final color = widget.color;
 
     return Scaffold(
@@ -82,7 +75,8 @@ class _PressureViewState extends State<PressureView> {
               return Center(
                 child: Text(
                   "Sem dados",
-                  style: GoogleFonts.orbitron(color: Colors.white70),
+                  style: GoogleFonts.orbitron(
+                      color: Colors.white70, fontSize: context.rf(14)),
                 ),
               );
             }
@@ -99,7 +93,7 @@ class _PressureViewState extends State<PressureView> {
             final currentPressure = _currentPressure();
 
             int labelInterval = 1;
-            final maxLabels = (MediaQuery.of(context).size.width / 60).floor();
+            final maxLabels = (context.sw / 60).floor();
             if (vm.labels.length > maxLabels && maxLabels > 0) {
               labelInterval = (vm.labels.length / maxLabels).ceil();
             }
@@ -107,23 +101,32 @@ class _PressureViewState extends State<PressureView> {
             String horaRealApi = vm.ultimaHora;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: EdgeInsets.symmetric(
+                  vertical: context.hp(2.5), horizontal: context.wp(5)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Header row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.speed, color: color, size: 30),
-                          const SizedBox(width: 8),
-                          Text(
-                            widget.titulo,
-                            style: GoogleFonts.orbitron(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          Icon(Icons.speed, color: color, size: context.rf(22)),
+                          SizedBox(width: context.wp(2)),
+                          // allow title to wrap/ellipsis
+                          ConstrainedBox(
+                            constraints:
+                                BoxConstraints(maxWidth: context.wp(60)),
+                            child: Text(
+                              widget.titulo,
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: context.rf(16),
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -135,123 +138,141 @@ class _PressureViewState extends State<PressureView> {
                             DateFormat('dd/MM/yyyy').format(DateTime.now()),
                             style: GoogleFonts.orbitron(
                               color: Colors.white70,
-                              fontSize: 13,
+                              fontSize: context.rf(13),
                             ),
                           ),
+                          SizedBox(height: context.hp(0.5)),
                           Text(
                             horaRealApi,
                             style: GoogleFonts.orbitron(
                               color: color,
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize: context.rf(14),
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+
+                  SizedBox(height: context.hp(2)),
+
+                  // Current value card
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 32),
+                    padding: EdgeInsets.symmetric(
+                        vertical: context.hp(1.6), horizontal: context.wp(6)),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFF2B2B2B), Color(0xFF1A1A1A)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(context.wp(4)),
                       boxShadow: [
                         BoxShadow(
                           color: color.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
+                          blurRadius: context.wp(3),
+                          offset: Offset(0, context.hp(0.4)),
                         ),
                       ],
                     ),
                     child: Text(
                       '${currentPressure.toStringAsFixed(2)} ${_unit()}',
                       style: GoogleFonts.orbitron(
-                        fontSize: 30,
+                        fontSize: context.rf(28),
                         fontWeight: FontWeight.bold,
                         color: color,
                         letterSpacing: 1.2,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                  SfRadialGauge(
-                    axes: <RadialAxis>[
-                      RadialAxis(
-                        minimum: 0,
-                        maximum: _maxY(),
-                        ranges: <GaugeRange>[
-                          GaugeRange(
-                            startValue: 0,
-                            endValue: _maxY() * 0.45,
-                            color: Colors.orange,
-                          ),
-                          GaugeRange(
-                            startValue: _maxY() * 0.45,
-                            endValue: _maxY() * 0.75,
-                            color: Colors.green,
-                          ),
-                          GaugeRange(
-                            startValue: _maxY() * 0.75,
-                            endValue: _maxY(),
-                            color: Colors.red,
-                          ),
-                        ],
-                        pointers: <GaugePointer>[
-                          NeedlePointer(
-                            value: currentPressure,
-                            needleColor: color,
-                          ),
-                        ],
-                        annotations: <GaugeAnnotation>[
-                          GaugeAnnotation(
-                            widget: Text(
-                              '${currentPressure.toStringAsFixed(1)} ${_unit()}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: color,
+
+                  SizedBox(height: context.hp(2.5)),
+
+                  // Gauge
+                  SizedBox(
+                    height: context.hp(28), // gauge responsive height
+                    child: SfRadialGauge(
+                      axes: <RadialAxis>[
+                        RadialAxis(
+                          minimum: 0,
+                          maximum: _maxY(),
+                          ranges: <GaugeRange>[
+                            GaugeRange(
+                                startValue: 0,
+                                endValue: _maxY() * 0.45,
+                                color: Colors.orange),
+                            GaugeRange(
+                                startValue: _maxY() * 0.45,
+                                endValue: _maxY() * 0.75,
+                                color: Colors.green),
+                            GaugeRange(
+                                startValue: _maxY() * 0.75,
+                                endValue: _maxY(),
+                                color: Colors.red),
+                          ],
+                          pointers: <GaugePointer>[
+                            NeedlePointer(
+                                value: currentPressure, needleColor: color),
+                          ],
+                          annotations: <GaugeAnnotation>[
+                            GaugeAnnotation(
+                              widget: Text(
+                                '${currentPressure.toStringAsFixed(1)} ${_unit()}',
+                                style: TextStyle(
+                                  fontSize: context.rf(16),
+                                  fontWeight: FontWeight.bold,
+                                  color: color,
+                                ),
                               ),
-                            ),
-                            angle: 90,
-                            positionFactor: 0.8,
-                          )
-                        ],
-                      ),
-                    ],
+                              angle: 90,
+                              positionFactor: 0.8,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 24),
+
+                  SizedBox(height: context.hp(2.5)),
+
+                  // Stat cards
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      StatCard(
-                        label: 'Mínima',
-                        value: minPressao,
-                        color: Colors.blueAccent,
-                        unit: _unit(),
+                      Flexible(
+                        child: StatCard(
+                          label: 'Mínima',
+                          value: minPressao,
+                          color: Colors.blueAccent,
+                          unit: _unit(),
+                          // ensure StatCard internally is responsive; if not, wrap content with FittedBox or pass sizes
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      StatCard(
-                        label: 'Média',
-                        value: avgPressao,
-                        color: Colors.orangeAccent,
-                        unit: _unit(),
+                      SizedBox(width: context.wp(2)),
+                      Flexible(
+                        child: StatCard(
+                          label: 'Média',
+                          value: avgPressao,
+                          color: Colors.orangeAccent,
+                          unit: _unit(),
+                        ),
                       ),
-                      const SizedBox(width: 8),
-                      StatCard(
-                        label: 'Máxima',
-                        value: maxPressao,
-                        color: Colors.redAccent,
-                        unit: _unit(),
+                      SizedBox(width: context.wp(2)),
+                      Flexible(
+                        child: StatCard(
+                          label: 'Máxima',
+                          value: maxPressao,
+                          color: Colors.redAccent,
+                          unit: _unit(),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+
+                  SizedBox(height: context.hp(2.5)),
+
+                  // Chart container
                   Container(
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -259,7 +280,7 @@ class _PressureViewState extends State<PressureView> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(context.wp(3)),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black45,
@@ -268,9 +289,9 @@ class _PressureViewState extends State<PressureView> {
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(context.wp(4)),
                     width: double.infinity,
-                    height: 300,
+                    height: context.hp(38),
                     child: LineChart(
                       LineChartData(
                         lineBarsData: [
@@ -278,7 +299,7 @@ class _PressureViewState extends State<PressureView> {
                             spots: spots,
                             isCurved: true,
                             color: color,
-                            barWidth: 3,
+                            barWidth: context.wp(0.8),
                             belowBarData: BarAreaData(
                               show: true,
                               color: color.withOpacity(0.15),
@@ -305,21 +326,21 @@ class _PressureViewState extends State<PressureView> {
                               'Pressão (bar)',
                               style: GoogleFonts.orbitron(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: context.rf(14),
                                 color: Colors.white70,
                               ),
                             ),
-                            axisNameSize: 25,
+                            axisNameSize: context.rf(18),
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 28,
+                              reservedSize: context.wp(8),
                               interval: (_maxY() / 4),
                               getTitlesWidget: (value, _) => Padding(
-                                padding: const EdgeInsets.only(right: 4),
+                                padding: EdgeInsets.only(right: context.wp(1)),
                                 child: Text(
                                   value.toStringAsFixed(0),
                                   style: TextStyle(
-                                    fontSize: fontSize,
+                                    fontSize: context.rf(11),
                                     color: Colors.white60,
                                   ),
                                 ),
@@ -331,29 +352,28 @@ class _PressureViewState extends State<PressureView> {
                               'Horário',
                               style: GoogleFonts.orbitron(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: context.rf(14),
                                 color: Colors.white70,
                               ),
                             ),
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 30,
+                              reservedSize: context.wp(10),
                               interval: 1,
                               getTitlesWidget: (value, meta) {
                                 final index = (value - minX).round();
-
                                 if (index < 0 ||
                                     index >= vm.labels.length ||
                                     index % labelInterval != 0) {
                                   return const SizedBox.shrink();
                                 }
-
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 4),
+                                  padding:
+                                      EdgeInsets.only(top: context.hp(0.5)),
                                   child: Text(
                                     vm.labels[index],
                                     style: TextStyle(
-                                      fontSize: fontSize,
+                                      fontSize: context.rf(11),
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white70,
                                     ),
@@ -363,17 +383,40 @@ class _PressureViewState extends State<PressureView> {
                             ),
                           ),
                           rightTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
+                              sideTitles: SideTitles(showTitles: false)),
                           topTitles: AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
+                              sideTitles: SideTitles(showTitles: false)),
                         ),
                         borderData: FlBorderData(
                           show: true,
                           border: Border.all(
                             color: color.withOpacity(0.6),
-                            width: 1,
+                            width: context.wp(0.3),
+                          ),
+                        ),
+                        lineTouchData: LineTouchData(
+                          enabled: true,
+                          touchTooltipData: LineTouchTooltipData(
+                            tooltipBgColor: color,
+                            tooltipRoundedRadius: context.wp(2),
+                            tooltipPadding: EdgeInsets.all(context.wp(2)),
+                            getTooltipItems: (touchedSpots) {
+                              return touchedSpots.map((spot) {
+                                final index = (spot.x - minX).round();
+                                final time =
+                                    (index >= 0 && index < vm.labels.length)
+                                        ? vm.labels[index]
+                                        : '';
+                                return LineTooltipItem(
+                                  'Hora: $time\nPressão (bar): ${spot.y.toStringAsFixed(2)} °C',
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: context.rf(11),
+                                  ),
+                                );
+                              }).toList();
+                            },
                           ),
                         ),
                       ),

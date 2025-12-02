@@ -8,34 +8,39 @@ class HomeMenuItem extends StatelessWidget {
   final VoidCallback? onPressed;
 
   const HomeMenuItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     this.warning,
     required this.icon,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    final wp = context.wp;
+    final hp = context.hp;
+    final rf = context.rf;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8.0),
+      padding: EdgeInsets.symmetric(vertical: hp(0.8)),
       child: InkWell(
         onTap: onPressed,
         borderRadius: BorderRadius.circular(20),
         child: Card(
           color: const Color(0xFF2C2C2C),
           elevation: 6,
-          shadowColor: Colors.black45,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
             side: const BorderSide(color: Color(0xFFB71C1C), width: 1.2),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(14.0),
+            padding: EdgeInsets.all(wp(3.5)),
             child: Row(
               children: [
+                // Ícone
                 Container(
+                  padding: EdgeInsets.all(wp(2.5)),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       colors: [Color(0xFFEF5350), Color(0xFFB71C1C)],
@@ -47,14 +52,15 @@ class HomeMenuItem extends StatelessWidget {
                       BoxShadow(
                         color: Colors.redAccent.withOpacity(0.4),
                         blurRadius: 8,
-                        spreadRadius: 1,
                       ),
                     ],
                   ),
-                  padding: const EdgeInsets.all(12),
-                  child: Icon(icon, color: Colors.white, size: 26),
+                  child: Icon(icon, color: Colors.white, size: rf(22)),
                 ),
-                const SizedBox(width: 16),
+
+                SizedBox(width: wp(4)),
+
+                // Textos
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +71,7 @@ class HomeMenuItem extends StatelessWidget {
                             child: Text(
                               title.toUpperCase(),
                               style: GoogleFonts.orbitron(
-                                fontSize: 15,
+                                fontSize: rf(15),
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                               ),
@@ -75,33 +81,34 @@ class HomeMenuItem extends StatelessWidget {
                             Row(
                               children: [
                                 Icon(Icons.warning_amber_rounded,
-                                    color: Colors.amberAccent, size: 18),
-                                const SizedBox(width: 4),
+                                    color: Colors.amberAccent, size: rf(16)),
+                                SizedBox(width: wp(1)),
                                 Text(
                                   warning!,
                                   style: GoogleFonts.poppins(
                                     color: Colors.amberAccent,
-                                    fontSize: 12,
+                                    fontSize: rf(12),
                                   ),
                                 ),
                               ],
                             ),
                         ],
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: hp(0.5)),
                       Text(
                         subtitle,
                         style: GoogleFonts.orbitron(
                           color: Colors.white70,
-                          fontSize: 13,
+                          fontSize: rf(13),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(width: 16),
-                const Icon(Icons.chevron_right,
-                    color: Colors.white70, size: 22),
+
+                SizedBox(width: wp(4)),
+
+                Icon(Icons.chevron_right, color: Colors.white70, size: rf(20)),
               ],
             ),
           ),

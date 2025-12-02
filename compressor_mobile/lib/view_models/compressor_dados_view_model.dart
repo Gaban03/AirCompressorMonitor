@@ -9,6 +9,9 @@ class CompressorDadosViewModel extends BaseViewModel {
   List<FlSpot> pressaoSpots = [];
   List<String> labels = [];
 
+  double horaCarga = 0;
+  double horaTotal = 0;
+
   double temperaturaAmbiente = 0;
   double temperaturaArComprimido = 0;
   double temperaturaOrvalho = 0;
@@ -42,10 +45,10 @@ class CompressorDadosViewModel extends BaseViewModel {
     switch (tipo) {
       case TipoTemperatura.ambiente:
         minY = 0;
-        maxY = 60;
+        maxY = 45;
         _fetchDashboardTemperatura((d) => d.temperaturaAmbiente.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardTemperatura(
             (d) => d.temperaturaAmbiente.toDouble(),
           ),
@@ -54,10 +57,10 @@ class CompressorDadosViewModel extends BaseViewModel {
 
       case TipoTemperatura.arComprimido:
         minY = 0;
-        maxY = 90;
+        maxY = 45;
         _fetchDashboardTemperatura((d) => d.temperaturaArComprimido.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardTemperatura(
             (d) => d.temperaturaArComprimido.toDouble(),
           ),
@@ -66,10 +69,10 @@ class CompressorDadosViewModel extends BaseViewModel {
 
       case TipoTemperatura.orvalho:
         minY = 0;
-        maxY = 15;
+        maxY = 20;
         _fetchDashboardTemperatura((d) => d.temperaturaOrvalho.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardTemperatura(
             (d) => d.temperaturaOrvalho.toDouble(),
           ),
@@ -78,10 +81,10 @@ class CompressorDadosViewModel extends BaseViewModel {
 
       case TipoTemperatura.oleo:
         minY = 0;
-        maxY = 80;
+        maxY = 110;
         _fetchDashboardTemperatura((d) => d.temperaturaOleo.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardTemperatura(
             (d) => d.temperaturaOleo.toDouble(),
           ),
@@ -115,7 +118,7 @@ class CompressorDadosViewModel extends BaseViewModel {
         final ultimo = lista.first;
 
         ultimaTemperatura = selector(ultimo);
-        ultimaHora = _formatHora(ultimo.dataHora.toString());
+        ultimaHora = _formatHora(DateTime.now().toString());
       }
 
       notifyListeners();
@@ -135,10 +138,10 @@ class CompressorDadosViewModel extends BaseViewModel {
     switch (tipo) {
       case TipoPressao.arComprimido:
         minY = 0;
-        maxY = 10;
+        maxY = 15;
         _fetchDashboardPressao((d) => d.pressaoArComprimido.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardPressao(
             (d) => d.pressaoArComprimido.toDouble(),
           ),
@@ -150,7 +153,7 @@ class CompressorDadosViewModel extends BaseViewModel {
         maxY = 8;
         _fetchDashboardPressao((d) => d.pressaoCarga.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardPressao(
             (d) => d.pressaoCarga.toDouble(),
           ),
@@ -162,7 +165,7 @@ class CompressorDadosViewModel extends BaseViewModel {
         maxY = 12;
         _fetchDashboardPressao((d) => d.pressaoAlivio.toDouble());
         _timer = Timer.periodic(
-          const Duration(seconds: 20),
+          const Duration(seconds: 1),
           (_) => _fetchDashboardPressao(
             (d) => d.pressaoAlivio.toDouble(),
           ),
@@ -204,7 +207,7 @@ class CompressorDadosViewModel extends BaseViewModel {
           pressaoAlivio = ultimoValor;
         }
 
-        ultimaHora = _formatHora(ultimo.dataHora.toString());
+        ultimaHora = _formatHora(DateTime.now().toString());
       }
 
       notifyListeners();
@@ -226,8 +229,13 @@ class CompressorDadosViewModel extends BaseViewModel {
   Future<void> fetchEstadoCompressor() async {
     try {
       final dados = await _service.fetchDados();
+
       mensagemEstado = dados.estado;
       ligado = dados.ligado;
+
+      horaCarga = dados.horaCarga.toDouble();
+      horaTotal = dados.horaTotal.toDouble();
+
       notifyListeners();
     } catch (e) {
       mensagemEstado = 'Erro';

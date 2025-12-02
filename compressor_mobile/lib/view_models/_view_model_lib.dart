@@ -16,4 +16,4 @@ part 'base_view_model.dart';
 part 'compressor_dados_view_model.dart';
 part 'compressor_control_view_model.dart';
 part 'config_ip_view_model.dart';
-
+part 'compressor_falhas_view_model.dart';

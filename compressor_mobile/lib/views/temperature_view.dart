@@ -38,8 +38,7 @@ class _TemperatureViewState extends State<TemperatureView> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final fontSize = screenWidth < 400 ? 11.0 : 13.0;
+    final color = widget.color;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -53,10 +52,11 @@ class _TemperatureViewState extends State<TemperatureView> {
             }
 
             if (vm.temperaturaSpots.isEmpty) {
-              return const Center(
+              return Center(
                 child: Text(
                   "Sem dados",
-                  style: TextStyle(color: Colors.white70),
+                  style: GoogleFonts.orbitron(
+                      color: Colors.white70, fontSize: context.rf(14)),
                 ),
               );
             }
@@ -71,36 +71,42 @@ class _TemperatureViewState extends State<TemperatureView> {
                     vm.temperaturaSpots.length;
 
             int labelInterval = 1;
-            final maxLabels = (MediaQuery.of(context).size.width / 60).floor();
+            final maxLabels = (context.sw / 60).floor();
             if (vm.labels.length > maxLabels && maxLabels > 0) {
               labelInterval = (vm.labels.length / maxLabels).ceil();
             }
 
             DateTime dt = DateTime.now();
             String dataFormatada = DateFormat('dd/MM/yyyy').format(dt);
-
             String horaFormatada = vm.ultimaHora;
 
-            final color = widget.color;
-
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              padding: EdgeInsets.symmetric(
+                  vertical: context.hp(2.5), horizontal: context.wp(5)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.thermostat, color: color, size: 30),
-                          const SizedBox(width: 8),
-                          Text(
-                            widget.titulo,
-                            style: GoogleFonts.orbitron(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                          Icon(Icons.thermostat,
+                              color: color, size: context.rf(22)),
+                          SizedBox(width: context.wp(2)),
+                          ConstrainedBox(
+                            constraints:
+                                BoxConstraints(maxWidth: context.wp(60)),
+                            child: Text(
+                              widget.titulo,
+                              style: GoogleFonts.orbitron(
+                                color: Colors.white,
+                                fontSize: context.rf(16),
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],
@@ -112,74 +118,90 @@ class _TemperatureViewState extends State<TemperatureView> {
                             dataFormatada,
                             style: GoogleFonts.orbitron(
                               color: Colors.white70,
-                              fontSize: 13,
+                              fontSize: context.rf(13),
                             ),
                           ),
+                          SizedBox(height: context.hp(0.5)),
                           Text(
                             horaFormatada,
                             style: GoogleFonts.orbitron(
                               color: color,
                               fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              fontSize: context.rf(14),
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 16),
+
+                  SizedBox(height: context.hp(2)),
+
+                  // Current temperature card
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 14, horizontal: 32),
+                    padding: EdgeInsets.symmetric(
+                        vertical: context.hp(1.6), horizontal: context.wp(6)),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFF2B2B2B), Color(0xFF1A1A1A)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(context.wp(4)),
                       boxShadow: [
                         BoxShadow(
                           color: color.withOpacity(0.3),
-                          blurRadius: 10,
-                          offset: const Offset(0, 3),
+                          blurRadius: context.wp(3),
+                          offset: Offset(0, context.hp(0.4)),
                         ),
                       ],
                     ),
                     child: Text(
                       '${vm.ultimaTemperatura.toStringAsFixed(2)} °C',
                       style: GoogleFonts.orbitron(
-                        fontSize: 30,
+                        fontSize: context.rf(28),
                         fontWeight: FontWeight.bold,
                         color: color,
                         letterSpacing: 1.2,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+
+                  SizedBox(height: context.hp(2.5)),
+
+                  // Stat cards
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      StatCard(
-                          label: 'Mínima',
-                          value: minTemp,
-                          color: Colors.blueAccent,
-                          unit: '°C'),
-                      const SizedBox(width: 8),
-                      StatCard(
-                          label: 'Média',
-                          value: avgTemp,
-                          color: Colors.orangeAccent,
-                          unit: '°C'),
-                      const SizedBox(width: 8),
-                      StatCard(
-                          label: 'Máxima',
-                          value: maxTemp,
-                          color: Colors.redAccent,
-                          unit: '°C'),
+                      Flexible(
+                        child: StatCard(
+                            label: 'Mínima',
+                            value: minTemp,
+                            color: Colors.blueAccent,
+                            unit: '°C'),
+                      ),
+                      SizedBox(width: context.wp(2)),
+                      Flexible(
+                        child: StatCard(
+                            label: 'Média',
+                            value: avgTemp,
+                            color: Colors.orangeAccent,
+                            unit: '°C'),
+                      ),
+                      SizedBox(width: context.wp(2)),
+                      Flexible(
+                        child: StatCard(
+                            label: 'Máxima',
+                            value: maxTemp,
+                            color: Colors.redAccent,
+                            unit: '°C'),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 24),
+
+                  SizedBox(height: context.hp(2.5)),
+
+                  // Chart container
                   Container(
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
@@ -187,7 +209,7 @@ class _TemperatureViewState extends State<TemperatureView> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(context.wp(3)),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black45,
@@ -196,9 +218,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                         ),
                       ],
                     ),
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(context.wp(4)),
                     width: double.infinity,
-                    height: 300,
+                    height: context.hp(38),
                     child: LineChart(
                       LineChartData(
                         lineBarsData: [
@@ -206,11 +228,9 @@ class _TemperatureViewState extends State<TemperatureView> {
                             spots: vm.temperaturaSpots,
                             isCurved: true,
                             color: color,
-                            barWidth: 3,
+                            barWidth: context.wp(0.8),
                             belowBarData: BarAreaData(
-                              show: true,
-                              color: color.withOpacity(0.15),
-                            ),
+                                show: true, color: color.withOpacity(0.15)),
                             dotData: FlDotData(show: false),
                           ),
                         ],
@@ -234,21 +254,21 @@ class _TemperatureViewState extends State<TemperatureView> {
                               'Temperatura (°C)',
                               style: GoogleFonts.orbitron(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14,
+                                fontSize: context.rf(14),
                                 color: Colors.white70,
                               ),
                             ),
-                            axisNameSize: 25,
+                            axisNameSize: context.rf(18),
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 28,
-                              interval: 5,
+                              reservedSize: context.wp(8),
+                              interval: 10,
                               getTitlesWidget: (value, _) => Padding(
-                                padding: const EdgeInsets.only(right: 4),
+                                padding: EdgeInsets.only(right: context.wp(1)),
                                 child: Text(
                                   value.toStringAsFixed(0),
                                   style: TextStyle(
-                                    fontSize: fontSize,
+                                    fontSize: context.rf(11),
                                     color: Colors.white60,
                                   ),
                                 ),
@@ -257,19 +277,19 @@ class _TemperatureViewState extends State<TemperatureView> {
                           ),
                           bottomTitles: AxisTitles(
                             axisNameWidget: Padding(
-                              padding: const EdgeInsets.only(top: 0),
+                              padding: EdgeInsets.only(top: 0),
                               child: Text(
                                 'Horário',
                                 style: GoogleFonts.orbitron(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 14,
+                                  fontSize: context.rf(14),
                                   color: Colors.white70,
                                 ),
                               ),
                             ),
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 30,
+                              reservedSize: context.wp(10),
                               interval: 1,
                               getTitlesWidget: (value, meta) {
                                 final index = (value - minX).round();
@@ -279,11 +299,12 @@ class _TemperatureViewState extends State<TemperatureView> {
                                   return const SizedBox.shrink();
                                 }
                                 return Padding(
-                                  padding: const EdgeInsets.only(top: 4),
+                                  padding:
+                                      EdgeInsets.only(top: context.hp(0.5)),
                                   child: Text(
                                     vm.labels[index],
                                     style: TextStyle(
-                                      fontSize: fontSize,
+                                      fontSize: context.rf(11),
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white70,
                                     ),
@@ -300,16 +321,15 @@ class _TemperatureViewState extends State<TemperatureView> {
                         borderData: FlBorderData(
                           show: true,
                           border: Border.all(
-                            color: color.withOpacity(0.6),
-                            width: 1,
-                          ),
+                              color: color.withOpacity(0.6),
+                              width: context.wp(0.3)),
                         ),
                         lineTouchData: LineTouchData(
                           enabled: true,
                           touchTooltipData: LineTouchTooltipData(
                             tooltipBgColor: color,
-                            tooltipRoundedRadius: 12,
-                            tooltipPadding: const EdgeInsets.all(8),
+                            tooltipRoundedRadius: context.wp(2),
+                            tooltipPadding: EdgeInsets.all(context.wp(2)),
                             getTooltipItems: (touchedSpots) {
                               return touchedSpots.map((spot) {
                                 final index = (spot.x - minX).round();
@@ -319,9 +339,10 @@ class _TemperatureViewState extends State<TemperatureView> {
                                         : '';
                                 return LineTooltipItem(
                                   'Hora: $time\nTemp: ${spot.y.toStringAsFixed(2)} °C',
-                                  const TextStyle(
+                                  TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
+                                    fontSize: context.rf(11),
                                   ),
                                 );
                               }).toList();

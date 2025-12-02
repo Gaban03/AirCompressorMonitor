@@ -24,4 +24,19 @@ class CompressorService extends BaseService {
     final jsonData = await get('confirmacao/ligado?compressorId=$compressorId');
     return jsonData['ligado'] as bool;
   }
+
+  Future<PageDTO<CompressorFalhasDto>> fetchFalhas({
+    required int idCompressor,
+    int page = 0,
+    int size = 1,
+  }) async {
+    final jsonData = await get(
+      'compressor/falhas?idCompressor=$idCompressor&page=$page&size=$size',
+    );
+
+    return PageDTO.fromJson(
+      jsonData,
+      (json) => CompressorFalhasDto.fromJson(json),
+    );
+  }
 }
