@@ -14,6 +14,7 @@ import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
 import br.com.compress.comunica_compress.model.Compressor;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.model.Falha;
+import br.com.compress.comunica_compress.repository.AlertaRepository;
 import br.com.compress.comunica_compress.repository.CompressorDadosRepository;
 import br.com.compress.comunica_compress.repository.CompressorRepository;
 import br.com.compress.comunica_compress.repository.FalhaRepository;
@@ -30,6 +31,9 @@ public class CompressorDadosService {
 
     @Autowired
     FalhaRepository falhaRepository;
+
+    @Autowired
+    AlertaRepository alertaRepository;
 
     // DTO → Entity
     public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha) {
@@ -54,6 +58,8 @@ public class CompressorDadosService {
     public CompressorDadosResponseDTO toResponse(CompressorDados entity) {
         String falhaId = entity.getFalha() != null ? entity.getFalha().getId() : null;
         String falhaDescricao = entity.getFalha() != null ? entity.getFalha().getDescricao() : null;
+        String alertaId = entity.getAlerta() != null ? entity.getAlerta().getId() : null;
+        String alertaDescricao = entity.getAlerta() != null ? entity.getAlerta().getDescricao() : null;
 
         return new CompressorDadosResponseDTO(
                 entity.getDataHora(),
@@ -69,7 +75,9 @@ public class CompressorDadosService {
                 entity.getPressaoCarga(),
                 entity.getPressaoAlivio(),
                 falhaId,
-                falhaDescricao);
+                falhaDescricao,
+                alertaId,
+                alertaDescricao);
     }
 
     @Transactional
@@ -132,5 +140,10 @@ public class CompressorDadosService {
     @Transactional
     public Page<CompressorDados> buscarFalhas(Integer idCompressor, Pageable pageable) {
         return compressorDadosRepository.findByCompressorIdAndFalhaIdNot(idCompressor, "0x00", pageable);
+    }
+
+    @Transactional
+    public Page<CompressorDados> buscarAlertas(Integer idCompressor, Pageable pageable) {
+        return compressorDadosRepository.findByCompressorIdAndAlertaIdNot(idCompressor, "", pageable);
     }
 }
