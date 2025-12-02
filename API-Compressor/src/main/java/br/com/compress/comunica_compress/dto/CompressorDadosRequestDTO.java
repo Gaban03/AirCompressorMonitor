@@ -15,5 +15,6 @@ public record CompressorDadosRequestDTO(
                 Float pressaoAlivio,
                 Float pressaoCarga,
                 @NonNull Integer compressorId,
-                @NonNull String falhaId) {
+                @NonNull String falhaId,
+                @NonNull String alertaId) {
 }
