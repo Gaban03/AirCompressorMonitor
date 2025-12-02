@@ -32,7 +32,7 @@ public class CompressorDadosService {
     @Autowired
     FalhaRepository falhaRepository;
 
-    @Autowired 
+    @Autowired
     AlertaRepository alertaRepository;
 
     // DTO → Entity
@@ -140,5 +140,10 @@ public class CompressorDadosService {
     @Transactional
     public Page<CompressorDados> buscarFalhas(Integer idCompressor, Pageable pageable) {
         return compressorDadosRepository.findByCompressorIdAndFalhaIdNot(idCompressor, "0x00", pageable);
+    }
+
+    @Transactional
+    public Page<CompressorDados> buscarAlertas(Integer idCompressor, Pageable pageable) {
+        return compressorDadosRepository.findByCompressorIdAndAlertaIdNot(idCompressor, "", pageable);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.compress.comunica_compress.dto.AlertasDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
 import br.com.compress.comunica_compress.dto.FalhasDTO;
@@ -83,6 +84,26 @@ public class CompressorDadosController {
                 }
 
                 Page<FalhasDTO> dtoPage = page.map(reg -> new FalhasDTO(
+                                reg.getFalha().getId().toString(),
+                                reg.getFalha().getDescricao(),
+                                reg.getDataHora()));
+
+                return ResponseEntity.ok(dtoPage);
+        }
+
+        @Operation(summary = "Lista todas os alertas do compressor")
+        @GetMapping("/alertas")
+        public ResponseEntity<Page<AlertasDTO>> listarAlertas(
+                        @RequestParam Integer idCompressor,
+                        Pageable pageable) {
+
+                Page<CompressorDados> page = compressorDadosService.buscarAlertas(idCompressor, pageable);
+
+                if (page.isEmpty()) {
+                        return ResponseEntity.noContent().build();
+                }
+
+                Page<AlertasDTO> dtoPage = page.map(reg -> new AlertasDTO(
                                 reg.getFalha().getId().toString(),
                                 reg.getFalha().getDescricao(),
                                 reg.getDataHora()));

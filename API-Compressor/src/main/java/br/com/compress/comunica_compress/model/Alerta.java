@@ -8,18 +8,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
 
 public class Alerta {
+
     @Id
     private String id;
 
     @NotBlank
     private String descricao;
 
-    
 }
