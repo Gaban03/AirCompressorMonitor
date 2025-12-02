@@ -19,4 +19,9 @@ public interface CompressorDadosRepository extends JpaRepository<CompressorDados
             Integer idCompressor,
             String idFalha,
             Pageable pageable);
+
+    Page<CompressorDados> findByCompressorIdAndAlertaIdNot(
+            Integer idCompressor,
+            String idAlerta,
+            Pageable pageable);
 }

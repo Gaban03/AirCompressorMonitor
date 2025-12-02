@@ -79,4 +79,8 @@ public class CompressorDados {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "falha_idFalha")
     private Falha falha;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "alerta_idAlerta")
+    private Alerta alerta;  
 }

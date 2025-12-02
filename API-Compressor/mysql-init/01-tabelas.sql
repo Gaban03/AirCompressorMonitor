@@ -33,6 +33,13 @@ CREATE TABLE
     PRIMARY KEY (`id`)
   ) ENGINE = InnoDB;
 
+  CREATE TABLE
+  IF NOT EXISTS `compressor_db`.`alerta` (
+    `id` VARCHAR(4) NOT NULL,
+    `descricao` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`id`)
+  ) ENGINE = InnoDB;
+
 -- -----------------------------------------------------
 -- Table `compressor_db`.`compressor`
 -- -----------------------------------------------------

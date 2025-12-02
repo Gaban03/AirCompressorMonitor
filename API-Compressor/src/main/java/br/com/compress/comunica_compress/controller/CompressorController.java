@@ -23,7 +23,7 @@ public class CompressorController {
     private CompressorRepository compressorRepository;
 
     @Operation(summary = "Rota para atualizar se o compressor está ligado ou desligado")
-    @PatchMapping("/ligado")
+    @PostMapping("/ligado")
     @Transactional
     public ResponseEntity<Compressor> atualizarLigado(@RequestBody ComandoRequestDTO dto) {
         return compressorRepository.findById(dto.compressorId())

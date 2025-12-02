@@ -16,5 +16,7 @@ public record CompressorDadosResponseDTO(
         Float pressaoCarga,
         Float pressaoAlivio,
         String falhaId,
-        String falhaDescricao
+        String falhaDescricao,
+        String alertaId,
+        String alertaDescricao
 ) {}
