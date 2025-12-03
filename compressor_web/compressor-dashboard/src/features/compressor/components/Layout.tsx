@@ -6,7 +6,7 @@ type LayoutProps = {
 export function Layout({ children, header }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-[#0d0d0d] to-black text-slate-100">
-      
+
       <header
         className="
           px-6 py-6
@@ -18,7 +18,7 @@ export function Layout({ children, header }: LayoutProps) {
         <div className="max-w-7xl mx-auto">{header}</div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-16 space-y-16">
+      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {children}
       </main>
     </div>
