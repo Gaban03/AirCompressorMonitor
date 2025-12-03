@@ -5,14 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'app.dart';
-import '../src/notification/noti_libs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseMsg().initFCM();
+  //await FirebaseMsg().initFCM();
   await setupLocator();
 
   runApp(

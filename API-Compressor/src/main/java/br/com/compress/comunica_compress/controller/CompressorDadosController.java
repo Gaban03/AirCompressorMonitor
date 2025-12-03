@@ -110,5 +110,4 @@ public class CompressorDadosController {
 
                 return ResponseEntity.ok(dtoPage);
         }
-
 }

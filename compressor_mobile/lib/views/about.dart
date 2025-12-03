@@ -27,7 +27,7 @@ class _AboutState extends State<About> {
     Developer(
       nome: 'Nicolas Ribeiro',
       cargo: 'Desenvolvedor de Embarcados e Infraestrutura',
-      email: 'oloconicao@gmail.com',
+      email: 'nicolas.ribeiro@sp.senai.br',
       telefone: 'Celular: (16) 99120-4354',
       fotoUrl: 'assets/images/img_nicolas.jpg',
     ),

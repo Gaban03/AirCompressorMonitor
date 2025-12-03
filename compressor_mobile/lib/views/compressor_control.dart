@@ -63,15 +63,15 @@ class _CompressorControlState extends State<CompressorControl> {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      Text(
-                        vm.dataEstado != null
-                            ? 'Última atualização: ${vm.dataEstado}'
-                            : 'Obtendo status...',
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          color: Colors.white70,
-                        ),
-                      ),
+                      // Text(
+                      //   vm.dataEstado != null
+                      //       ? 'Última atualização: ${vm.dataEstado}'
+                      //       : 'Obtendo status...',
+                      //   style: GoogleFonts.poppins(
+                      //     fontSize: 14,
+                      //     color: Colors.white70,
+                      //   ),
+                      // ),
                       const SizedBox(height: 50),
                       AnimatedContainer(
                         duration: const Duration(milliseconds: 400),
