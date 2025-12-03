@@ -77,10 +77,10 @@ public class CompressorDados {
     private Compressor compressor;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "falha_idFalha")
+    @JoinColumn(name = "falha_id_falha")
     private Falha falha;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "alerta_idAlerta")
+    @JoinColumn(name = "alerta_id_alerta")
     private Alerta alerta;  
 }
