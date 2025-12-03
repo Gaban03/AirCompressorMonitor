@@ -73,29 +73,48 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`comandos` (
 -- -----------------------------------------------------
 -- Table `compressor_db`.`registro_compressor`
 -- -----------------------------------------------------
-CREATE TABLE
-  IF NOT EXISTS `compressor_db`.`registro_compressor` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `data_hora` DATETIME NULL,
-    `ligado` BOOLEAN NULL,
-    `estado` VARCHAR(10) NULL,
-    `temperatura_ar_Comprimido` FLOAT NULL,
-    `temperatura_ambiente` FLOAT NULL,
-    `temperatura_oleo` FLOAT NULL,
-    `temperatura_orvalho` FLOAT NULL,
-    `pressao_ar_comprimido` FLOAT NULL,
-    `hora_carga` FLOAT NULL,
-    `hora_total` FLOAT NULL,
-    `pressao_carga` FLOAT NULL,
-    `pressao_alivio` FLOAT NULL,
-    `falha_idFalha` VARCHAR(4) NULL,
-    `compressor_id` INT NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `fk_registro compressor_falha1_idx` (`falha_idFalha` ASC) VISIBLE,
-    INDEX `fk_registro_compressor_compressor1_idx` (`compressor_id` ASC) VISIBLE,
-    CONSTRAINT `fk_registro compressor_falha1` FOREIGN KEY (`falha_idFalha`) REFERENCES `compressor_db`.`falha` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT `fk_registro_compressor_compressor1` FOREIGN KEY (`compressor_id`) REFERENCES `compressor_db`.`compressor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-  ) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `compressor_db`.`registro_compressor` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `data_hora` DATETIME NULL,
+  `ligado` BOOLEAN NULL,
+  `estado` VARCHAR(10) NULL,
+  `temperatura_ar_Comprimido` FLOAT NULL,
+  `temperatura_ambiente` FLOAT NULL,
+  `temperatura_oleo` FLOAT NULL,
+  `temperatura_orvalho` FLOAT NULL,
+  `pressao_ar_comprimido` FLOAT NULL,
+  `hora_carga` FLOAT NULL,
+  `hora_total` FLOAT NULL,
+  `pressao_carga` FLOAT NULL,
+  `pressao_alivio` FLOAT NULL,
+  `falha_idFalha` VARCHAR(4) NULL,
+  `alerta_id_alerta` VARCHAR(4) NULL,
+  `compressor_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+
+  INDEX `idx_falha` (`falha_idFalha` ASC),
+  INDEX `idx_alerta` (`alerta_id_alerta` ASC),
+  INDEX `idx_compressor` (`compressor_id` ASC),
+
+  CONSTRAINT `fk_registro_falha`
+    FOREIGN KEY (`falha_idFalha`)
+    REFERENCES `compressor_db`.`falha` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+
+  CONSTRAINT `fk_registro_alerta`
+    FOREIGN KEY (`alerta_id_alerta`)
+    REFERENCES `compressor_db`.`alerta` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+
+  CONSTRAINT `fk_registro_compressor`
+    FOREIGN KEY (`compressor_id`)
+    REFERENCES `compressor_db`.`compressor` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `compressor_db`.`roles`
