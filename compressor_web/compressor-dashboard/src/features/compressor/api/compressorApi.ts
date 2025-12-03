@@ -5,6 +5,7 @@ import type {
   CompressorDadosResponseDTO,
   Compressor,
   PageFalhasDTO,
+  AlertasPageDTO,
 } from "../types";
 
 const DEFAULT_COMPRESSOR_ID = 1;
@@ -66,4 +67,15 @@ export async function getUltimoComando(
     }
     throw error;
   }
+}
+
+export async function getAlertas(
+  idCompressor: number = DEFAULT_COMPRESSOR_ID,
+  page: number = 0,
+  size: number = 10
+): Promise<AlertasPageDTO> {
+  const { data } = await api.get<AlertasPageDTO>("/compressor/alertas", {
+    params: { idCompressor, page, size },
+  });
+  return data;
 }

@@ -60,3 +60,24 @@ export interface PageFalhasDTO {
   last?: boolean;
   empty?: boolean;
 }
+
+export interface AlertasDTO {
+  id?: string;
+  descricao?: string;
+  horario?: string;
+}
+
+export interface AlertasPageDTO {
+  totalElements?: number;
+  totalPages?: number;
+  pageable?: PageableObject;
+  size?: number;
+  content?: AlertasDTO[];
+  number?: number;
+  sort?: SortObject;
+  numberOfElements?: number;
+  first?: boolean;
+  last?: boolean;
+  empty?: boolean;
+}
+
