@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:compressor_mobile/enums/pressure_type.dart';
 import 'package:compressor_mobile/enums/temperature_type.dart';
 import 'package:compressor_mobile/models/_models_lib.dart';
-import 'package:compressor_mobile/services/_services_lib.dart';
 import 'package:intl/intl.dart';
 
 import '../widgets/_widgets_lib.dart';
@@ -34,3 +33,4 @@ part 'about_dispositive_view.dart';
 part 'developer_profile_view.dart';
 part 'hour_load_total_hours_view.dart';
 part 'compressor_falhas_view.dart';
+part 'schedule_view.dart';
