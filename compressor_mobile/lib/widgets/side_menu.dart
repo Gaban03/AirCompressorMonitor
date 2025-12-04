@@ -36,7 +36,7 @@ class SideMenu extends StatelessWidget {
               SideMenuItem(
                   icon: FontAwesomeIcons.calendar,
                   title: "Agendamento",
-                  onTap: () => _navigateTo(const HomeView())),
+                  onTap: () => _navigateTo(const ScheduleView())),
               SideMenuItem(
                 icon: FontAwesomeIcons.gear,
                 title: "Configurações",
