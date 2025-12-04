@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
-import br.com.compress.comunica_compress.model.Alerta;
 import br.com.compress.comunica_compress.model.Compressor;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.model.Falha;
@@ -37,7 +36,7 @@ public class CompressorDadosService {
     AlertaRepository alertaRepository;
 
     // DTO → Entity
-    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha, Alerta alerta) {
+    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha) {
         CompressorDados entity = new CompressorDados();
         entity.setLigado(dto.ligado());
         entity.setEstado(dto.estado());
@@ -52,7 +51,6 @@ public class CompressorDadosService {
         entity.setPressaoAlivio(dto.pressaoAlivio());
         entity.setCompressor(compressor);
         entity.setFalha(falha);
-        entity.setAlerta(alerta);
         return entity;
     }
 
@@ -90,11 +88,8 @@ public class CompressorDadosService {
 
         Falha falha = falhaRepository.findById(dto.falhaId())
                 .orElseThrow(() -> new IllegalArgumentException("Falha " + dto.falhaId() + "não existe!"));
-        
-        Alerta alerta = alertaRepository.findById(dto.alertaId())
-                .orElseThrow(() -> new IllegalArgumentException("Alerta " + dto.alertaId() + "não existe!"));
 
-        CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha, alerta);
+        CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha);
 
         if (compressorDadosEntity == null) {
             throw new IllegalStateException("Falha ao converter dados para entidade. Verifique os valores de entrada.");
