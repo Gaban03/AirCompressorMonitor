@@ -51,7 +51,7 @@ class CompressorControlViewModel extends BaseViewModel {
       dataEstado = DateTime.now().toIso8601String();
       notifyListeners();
 
-      await Future.delayed(const Duration(seconds: 30));
+      await Future.delayed(const Duration(seconds: 15));
       await fetchStatus();
     } catch (e) {
       setError('Erro ao enviar comando: $e');

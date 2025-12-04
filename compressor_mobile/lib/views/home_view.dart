@@ -129,7 +129,7 @@ class _HomeViewState extends State<HomeView> {
                         tipo: TipoTemperatura.orvalho,
                         color: Colors.redAccent,
                         minY: 0,
-                        maxY: 45,
+                        maxY: 50,
                       ),
                     ),
                   ),

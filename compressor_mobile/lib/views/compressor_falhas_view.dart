@@ -41,7 +41,6 @@ class _CompressorFalhasViewState extends State<CompressorFalhasView> {
 
             return Column(
               children: [
-                // ⭐ PAGINADOR PROFISSIONAL
                 Paginator(
                   page: vm.page,
                   totalPages: vm.totalPages,

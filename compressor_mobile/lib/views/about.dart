@@ -18,31 +18,35 @@ class _AboutState extends State<About> {
 
   final List<Developer> developers = [
     Developer(
-      nome: 'Murilo Camargo',
-      cargo: 'Desenvolvedor Back-End',
-      email: 'muriloherrick@gmail.com',
-      telefone: 'Celular: (16) 99754-4500',
-      fotoUrl: 'assets/images/img_murilo.jpg',
-    ),
+        nome: 'Murilo Camargo',
+        cargo: 'Desenvolvedor Back-End',
+        email: 'muriloherrick@gmail.com',
+        telefone: 'Celular: (16) 99754-4500',
+        fotoUrl: 'assets/images/img_murilo.jpg',
+        githubUrl: 'https://github.com/Murilo-Herrick',
+        linkedinUrl:
+            'https://www.linkedin.com/in/murilo-herrick-571a93334/?locale=en'),
     Developer(
-      nome: 'Nicolas Ribeiro',
-      cargo: 'Desenvolvedor de Embarcados e Infraestrutura',
-      email: 'nicolas.ribeiro@sp.senai.br',
-      telefone: 'Celular: (16) 99120-4354',
-      fotoUrl: 'assets/images/img_nicolas.jpg',
-    ),
-    Developer(
-      nome: 'Pedro Martins',
-      cargo: 'Desenvolvedor Back-End',
-      email: 'pedroenriquellopes2011@gmail.com',
-      telefone: 'Celular: (16) 98898-6094',
-    ),
-    Developer(
-      nome: 'Vinicius Ramos',
-      cargo: 'Desenvolvedor de Embarcados',
-      email: 'viniciusaugusto6996@gmail.com',
-      telefone: 'Celular: (16) 99251-5599',
-    ),
+        nome: 'Nicolas Ribeiro',
+        cargo: 'Desenvolvedor de Embarcados e Infraestrutura',
+        email: 'nicolas.ribeiro@sp.senai.br',
+        telefone: 'Celular: (16) 99120-4354',
+        fotoUrl: 'assets/images/img_nicolas.jpg',
+        githubUrl: 'https://github.com/NicolasRibe',
+        linkedinUrl:
+            'https://www.linkedin.com/in/nicolas-moreira-ribeiro-37a139181/'),
+    // Developer(
+    //   nome: 'Pedro Martins',
+    //   cargo: 'Desenvolvedor Back-End',
+    //   email: 'pedroenriquellopes2011@gmail.com',
+    //   telefone: 'Celular: (16) 98898-6094',
+    // ),
+    // Developer(
+    //   nome: 'Vinicius Ramos',
+    //   cargo: 'Desenvolvedor de Embarcados',
+    //   email: 'viniciusaugusto6996@gmail.com',
+    //   telefone: 'Celular: (16) 99251-5599',
+    // ),
     Developer(
       nome: 'Vinicius Gaban',
       cargo: 'Desenvolvedor Mobile',
