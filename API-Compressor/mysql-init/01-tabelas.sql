@@ -87,17 +87,17 @@ CREATE TABLE IF NOT EXISTS `compressor_db`.`registro_compressor` (
   `hora_total` FLOAT NULL,
   `pressao_carga` FLOAT NULL,
   `pressao_alivio` FLOAT NULL,
-  `falha_idFalha` VARCHAR(4) NULL,
+  `falha_id_falha` VARCHAR(4) NULL,
   `alerta_id_alerta` VARCHAR(4) NULL,
   `compressor_id` INT NOT NULL,
   PRIMARY KEY (`id`),
 
-  INDEX `idx_falha` (`falha_idFalha` ASC),
+  INDEX `idx_falha` (`falha_id_falha` ASC),
   INDEX `idx_alerta` (`alerta_id_alerta` ASC),
   INDEX `idx_compressor` (`compressor_id` ASC),
 
   CONSTRAINT `fk_registro_falha`
-    FOREIGN KEY (`falha_idFalha`)
+    FOREIGN KEY (`falha_id_falha`)
     REFERENCES `compressor_db`.`falha` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,

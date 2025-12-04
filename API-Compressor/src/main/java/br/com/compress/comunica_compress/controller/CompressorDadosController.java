@@ -104,8 +104,8 @@ public class CompressorDadosController {
                 }
 
                 Page<AlertasDTO> dtoPage = page.map(reg -> new AlertasDTO(
-                                reg.getFalha().getId().toString(),
-                                reg.getFalha().getDescricao(),
+                                reg.getAlerta().getId().toString(),
+                                reg.getAlerta().getDescricao(),
                                 reg.getDataHora()));
 
                 return ResponseEntity.ok(dtoPage);
