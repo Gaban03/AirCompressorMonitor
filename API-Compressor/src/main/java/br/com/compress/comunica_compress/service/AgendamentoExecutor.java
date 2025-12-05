@@ -12,108 +12,70 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.com.compress.comunica_compress.dto.ComandoRequestDTO;
 import br.com.compress.comunica_compress.model.Agendamento;
-import br.com.compress.comunica_compress.model.Agendamento.Recorrencia;
 import br.com.compress.comunica_compress.repository.AgendamentoRepository;
 
 @Service
 public class AgendamentoExecutor {
 
-    private final AgendamentoRepository agendamentoRepository;
+    private final AgendamentoRepository repo;
     private final ComandoService comandoService;
 
-    public AgendamentoExecutor(AgendamentoRepository agendamentoRepository,
-                               ComandoService comandoService) {
-        this.agendamentoRepository = agendamentoRepository;
+    public AgendamentoExecutor(AgendamentoRepository repo, ComandoService comandoService) {
+        this.repo = repo;
         this.comandoService = comandoService;
     }
 
-    @Scheduled(fixedDelay = 60000) // a cada 60 segundos
+    @Scheduled(cron = "0 * * * * *") // a cada 1 minuto no segundo 0
     @Transactional
-    public void executarAgendamentos() {
-        LocalDateTime agora = LocalDateTime.now();
-        LocalTime horaAgora = agora.toLocalTime().withSecond(0).withNano(0);
-        DayOfWeek diaSemanaAgora = agora.getDayOfWeek();
-        int diaMesAgora = agora.getDayOfMonth();
+    public void executar() {
+        LocalDateTime agoraDateTime = LocalDateTime.now().withSecond(0).withNano(0);
+        LocalTime agora = agoraDateTime.toLocalTime();
+        DayOfWeek hoje = LocalDate.now().getDayOfWeek();
 
-        executarUnicos(agora);
-        executarSemanais(diaSemanaAgora, horaAgora);
-        executarMensais(diaMesAgora, horaAgora);
-    }
+        List<Agendamento> ativos = repo.findByAtivoTrue();
 
-    private void executarUnicos(LocalDateTime agora) {
-        List<Agendamento> pendentes = agendamentoRepository
-                .findByRecorrenciaAndExecutadoFalseAndDataHoraExecucaoLessThanEqual(
-                        Recorrencia.UNICO, agora);
+        for (Agendamento ag : ativos) {
 
-        for (Agendamento ag : pendentes) {
-            dispararComando(ag);
-            ag.setExecutado(true);
-            ag.setDataHoraExecucaoReal(LocalDateTime.now());
-            agendamentoRepository.save(ag);
-        }
-    }
-
-    private void executarSemanais(DayOfWeek diaSemanaAgora, LocalTime horaAgora) {
-        LocalTime inicioJanela = horaAgora.minusMinutes(1);
-        LocalTime fimJanela = horaAgora.plusMinutes(1);
-
-        List<Agendamento> semanais = agendamentoRepository
-                .findByRecorrenciaAndDiaSemana(Recorrencia.SEMANAL, diaSemanaAgora);
-
-        for (Agendamento ag : semanais) {
-            if (ag.getHoraExecucao() == null) continue;
-
-            boolean bateHorario =
-                    !ag.getHoraExecucao().isBefore(inicioJanela) &&
-                    !ag.getHoraExecucao().isAfter(fimJanela);
-
-            boolean jaExecutouHoje =
-                    ag.getDataHoraExecucaoReal() != null &&
-                    ag.getDataHoraExecucaoReal().toLocalDate().equals(LocalDate.now());
-
-            if (bateHorario && !jaExecutouHoje) {
-                dispararComando(ag);
-                ag.setDataHoraExecucaoReal(LocalDateTime.now());
-                agendamentoRepository.save(ag);
+            // se não está configurado para hoje, pula
+            if (ag.getDiasSemana() == null || !ag.getDiasSemana().contains(hoje)) {
+                continue;
             }
-        }
-    }
 
-    private void executarMensais(int diaMesAgora, LocalTime horaAgora) {
-        LocalTime inicioJanela = horaAgora.minusMinutes(1);
-        LocalTime fimJanela = horaAgora.plusMinutes(1);
-
-        List<Agendamento> mensais = agendamentoRepository
-                .findByRecorrencia(Recorrencia.MENSAL);
-
-        for (Agendamento ag : mensais) {
-            if (ag.getDiaMes() == null || ag.getHoraExecucao() == null) continue;
-
-            if (!ag.getDiaMes().equals(diaMesAgora)) continue;
-
-            boolean bateHorario =
-                    !ag.getHoraExecucao().isBefore(inicioJanela) &&
-                    !ag.getHoraExecucao().isAfter(fimJanela);
-
-            boolean jaExecutouEsteMes =
-                    ag.getDataHoraExecucaoReal() != null &&
-                    ag.getDataHoraExecucaoReal().getYear() == LocalDate.now().getYear() &&
-                    ag.getDataHoraExecucaoReal().getMonth() == LocalDate.now().getMonth();
-
-            if (bateHorario && !jaExecutouEsteMes) {
-                dispararComando(ag);
-                ag.setDataHoraExecucaoReal(LocalDateTime.now());
-                agendamentoRepository.save(ag);
+            // LIGAR
+            if (ag.getHoraInicio().equals(agora)) {
+                if (deveDispararInicio(ag, agoraDateTime.toLocalDate())) {
+                    disparar(ag, true);
+                    ag.setUltimoDisparoInicio(agoraDateTime);
+                }
             }
+
+            // DESLIGAR
+            if (ag.getHoraFim().equals(agora)) {
+                if (deveDispararFim(ag, agoraDateTime.toLocalDate())) {
+                    disparar(ag, false);
+                    ag.setUltimoDisparoFim(agoraDateTime);
+                }
+            }
+
+            repo.save(ag);
         }
     }
 
-    @SuppressWarnings("null")
-    private void dispararComando(Agendamento ag) {
-        ComandoRequestDTO dto = new ComandoRequestDTO(
+    private boolean deveDispararInicio(Agendamento ag, LocalDate hoje) {
+        if (ag.getUltimoDisparoInicio() == null)
+            return true;
+        return !ag.getUltimoDisparoInicio().toLocalDate().equals(hoje);
+    }
+
+    private boolean deveDispararFim(Agendamento ag, LocalDate hoje) {
+        if (ag.getUltimoDisparoFim() == null)
+            return true;
+        return !ag.getUltimoDisparoFim().toLocalDate().equals(hoje);
+    }
+
+    private void disparar(Agendamento ag, boolean comando) {
+        comandoService.salvar(new ComandoRequestDTO(
                 ag.getCompressor().getId(),
-                ag.getComando()
-        );
-        comandoService.salvar(dto);
+                comando));
     }
 }
