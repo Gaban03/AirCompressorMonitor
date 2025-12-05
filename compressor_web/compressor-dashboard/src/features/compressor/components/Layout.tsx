@@ -5,20 +5,35 @@ type LayoutProps = {
 
 export function Layout({ children, header }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-[#0d0d0d] to-black text-slate-100">
-
+    <div className="min-h-screen bg-gradient-to-b from-black via-[#050506] to-black text-slate-100">
+      {/* Barra superior */}
       <header
         className="
-          px-6 py-6
-          bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a]
-          border-b border-red-600/50
-          shadow-[0_0_25px_rgba(255,0,0,0.35)]
+          border-b border-red-600/40
+          bg-gradient-to-b from-[#111111] via-[#050505] to-[#050505]
+          shadow-[0_0_22px_rgba(255,0,0,0.28)]
         "
       >
-        <div className="max-w-7xl mx-auto">{header}</div>
+        <div
+          className="
+            mx-auto flex w-full
+            max-w-7xl 2xl:max-w-[1500px]
+            items-center justify-center
+            px-6 py-5
+          "
+        >
+          {header}
+        </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+      {/* Conteúdo */}
+      <main
+        className="
+          mx-auto flex w-full flex-col gap-6
+          max-w-7xl 2xl:max-w-[2000px]
+          px-6 py-6
+        "
+      >
         {children}
       </main>
     </div>
