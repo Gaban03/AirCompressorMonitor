@@ -2,63 +2,96 @@ import type { Compressor } from "../types";
 
 type HeaderProps = {
   compressor: Compressor | null;
-  estado: string | null; // recebe o ESTADO real da API: "ALIVIO", "STANDBY", etc.
+  estado: string | null; // "ALIVIO", "STANDBY", etc.
 };
 
-export function Header({ estado }: HeaderProps) {
+export function Header({ compressor, estado }: HeaderProps) {
+  const ligado = compressor?.ligado ?? null;
 
   const estadoFormatado = estado
     ? estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase()
     : "Carregando...";
 
-  // Paleta de cor por estado
   const estadoCor = (() => {
     switch (estado?.toUpperCase()) {
-      case "LIGADO":
-        return "bg-emerald-500";
-      case "EM CARGA":
-      case "CARGA":
-        return "bg-yellow-400";
+      case "DESLIGADO":
+        return "bg-gray-400";
+      case "PARTINDO":
+        return "bg-orange-400";
       case "ALIVIO":
       case "ALÍVIO":
         return "bg-blue-400";
+      case "EMCARGA":
+        return "bg-green-400";
       case "STANDBY":
-        return "bg-yellow-500";
-      case "DESLIGANDO":
-        return "bg-orange-400";
-      case "DESLIGADO":
-        return "bg-red-500";
+        return "bg-amber-400";
+      case "PARANDO":
+        return "bg-orange-600";
+      case "DESCONHECIDO":
       default:
-        return "bg-gray-400";
+        return "bg-neutral-400";
     }
   })();
 
+  const ligadoLabel =
+    ligado === null ? "Carregando..." : ligado ? "Ligado" : "Desligado";
+
+  const ligadoClasses =
+    ligado === null
+      ? "bg-zinc-700/60 border-zinc-500/40 text-zinc-200"
+      : ligado
+      ? "bg-emerald-500/15 border-emerald-400/60 text-emerald-300"
+      : "bg-red-500/20 border-red-400/60 text-red-300";
+
+  const ligadoDotClasses =
+    ligado === null
+      ? "bg-zinc-300"
+      : ligado
+      ? "bg-emerald-300"
+      : "bg-red-300";
+
   return (
-    <div className="flex items-center justify-center w-full">
-      
-      <div className="flex flex-col items-center">
-        <h1 className="text-2xl font-extrabold tracking-widest text-slate-100">
-          SENAI
+    <div className="flex w-full items-center justify-center">
+      <div className="flex flex-col items-center gap-3 text-center">
+        {/* Planta / local */}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-red-400/80">
+          {compressor?.senai ?? "SENAI"}
+        </p>
+
+        {/* Título */}
+        <h1 className="text-3xl font-extrabold tracking-[0.35em] text-slate-50">
+          Compressor
         </h1>
 
-        <div
-          className="
-            mt-1 px-4 py-1 rounded-full text-xs 
-            flex items-center gap-2
-            bg-gradient-to-r from-[#242424] to-[#151515]
-            border border-red-500/60
-            shadow-[0_0_10px_rgba(255,0,0,0.25)]
-          "
-        >
-          <span className={`h-2 w-2 rounded-full ${estadoCor}`} />
+        {/* Pills de status */}
+        <div className="mt-1 flex flex-wrap items-center justify-center gap-3">
+          {/* Ligado / Desligado */}
+          <div
+            className={`
+              flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold
+              bg-gradient-to-r from-[#151515] to-[#050505]
+              shadow-[0_0_14px_rgba(0,0,0,0.7)]
+              ${ligadoClasses}
+            `}
+          >
+            <span className={`h-2 w-2 rounded-full ${ligadoDotClasses}`} />
+            <span>{ligadoLabel}</span>
+          </div>
 
-          <span className="text-slate-200 font-semibold">
-            {estadoFormatado}
-          </span>
+          {/* Estado (Running, Alívio, etc) – sem neon */}
+          <div
+            className="
+              flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold
+              bg-[#151515]
+              border border-zinc-700
+              shadow-[0_0_6px_rgba(0,0,0,0.7)]
+            "
+          >
+            <span className={`h-2 w-2 rounded-full ${estadoCor}`} />
+            <span className="text-slate-100">{estadoFormatado}</span>
+          </div>
         </div>
       </div>
-
-      <div className="w-6" />
     </div>
   );
 }

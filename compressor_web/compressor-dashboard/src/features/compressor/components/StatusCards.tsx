@@ -12,26 +12,68 @@ type StatusCardsProps = {
 
 export function StatusCards({ dadosAtuais }: StatusCardsProps) {
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
+    <div
+      className="
+        grid gap-5
+        grid-cols-1
+        sm:grid-cols-2
+        md:grid-cols-3
+        lg:grid-cols-4
+        xl:grid-cols-5
+      "
+    >
       <Card title="Temp. Ar Comprimido">
-        <span className="text-xl font-bold">{formatTemperature(dadosAtuais?.temperaturaArComprimido)}</span>
+        <span className="text-lg font-semibold text-slate-50">
+          {formatTemperature(dadosAtuais?.temperaturaArComprimido)}
+        </span>
       </Card>
 
       <Card title="Temp. Ambiente">
-        <span className="text-xl font-bold">{formatTemperature(dadosAtuais?.temperaturaAmbiente)}</span>
+        <span className="text-lg font-semibold text-slate-50">
+          {formatTemperature(dadosAtuais?.temperaturaAmbiente)}
+        </span>
       </Card>
 
       <Card title="Pressão do Ar">
-        <span className="text-xl font-bold">{formatPressure(dadosAtuais?.pressaoArComprimido)}</span>
+        <span className="text-lg font-semibold text-slate-50">
+          {formatPressure(dadosAtuais?.pressaoArComprimido)}
+        </span>
       </Card>
 
-      <Card title="Horas em carga">
-        <span className="text-xl font-bold">{formatHours(dadosAtuais?.horaCarga)}</span>
+      <Card title="Horas em Carga">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatHours(dadosAtuais?.horaCarga)}
+        </span>
       </Card>
 
-      <Card title="Horas totais">
-        <span className="text-xl font-bold">{formatHours(dadosAtuais?.horaTotal)}</span>
+      <Card title="Horas Totais">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatHours(dadosAtuais?.horaTotal)}
+        </span>
+      </Card>
+
+      <Card title="Temp. Óleo">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatTemperature(dadosAtuais?.temperaturaOleo)}
+        </span>
+      </Card>
+
+      <Card title="Temp. Orvalho">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatTemperature(dadosAtuais?.temperaturaOrvalho)}
+        </span>
+      </Card>
+
+      <Card title="Pressão de Carga">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatPressure(dadosAtuais?.pressaoCarga)}
+        </span>
+      </Card>
+
+      <Card title="Pressão de Alívio">
+        <span className="text-lg font-semibold text-slate-50">
+          {formatPressure(dadosAtuais?.pressaoAlivio)}
+        </span>
       </Card>
     </div>
   );

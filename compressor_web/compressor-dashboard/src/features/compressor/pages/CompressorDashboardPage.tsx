@@ -4,6 +4,7 @@ import { FailuresTable } from "../components/FailuresTable";
 import { Header } from "../components/Header";
 import { HistoryChart } from "../components/HistoryChart";
 import { Layout } from "../components/Layout";
+import { MaintenanceCard } from "../components/MaintenanceCard";
 import { StatusCards } from "../components/StatusCards";
 import { useCompressorDashboard } from "../hooks/useCompressorDashboard";
 
@@ -23,31 +24,38 @@ export function CompressorDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-black via-zinc-900 to-black">
         <Spinner label="Carregando dashboard..." />
       </div>
     );
   }
 
   const header = (
-    <Header
-      compressor={compressor}
-      estado={dadosAtuais?.estado ?? null}
-    />
+    <Header compressor={compressor} estado={dadosAtuais?.estado ?? null} />
   );
 
   return (
     <Layout header={header}>
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      {/* Mobile: 1 coluna  |  Desktop: 3 colunas (esq: manutenção, meio: dados, dir: falhas/alertas) */}
+      <div
+        className="
+          grid gap-6
+          lg:[grid-template-columns:minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)]
+        "
+      >
+        {/* Coluna ESQUERDA – Manutenções */}
+        <div className="space-y-6">
+          <MaintenanceCard horasTotais={dadosAtuais?.horaTotal ?? null} />
+        </div>
 
-        {/* Esquerda */}
-        <div className="space-y-4">
+        {/* Coluna MEIO – Status + Gráfico */}
+        <div className="space-y-6">
           <StatusCards dadosAtuais={dadosAtuais} />
           <HistoryChart dadosHistorico={dadosHistorico} />
         </div>
 
-        {/* Direita */}
-        <div className="space-y-4">
+        {/* Coluna DIREITA – Falhas + Alertas */}
+        <div className="space-y-6">
           <FailuresTable
             falhasPage={falhasPage}
             page={falhasPageNumber}
@@ -60,7 +68,6 @@ export function CompressorDashboardPage() {
             onChangePage={changeAlertasPage}
           />
         </div>
-
       </div>
     </Layout>
   );
