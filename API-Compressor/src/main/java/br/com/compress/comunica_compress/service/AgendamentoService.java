@@ -1,6 +1,7 @@
 package br.com.compress.comunica_compress.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,99 +20,128 @@ public class AgendamentoService {
     private final CompressorRepository compressorRepository;
 
     public AgendamentoService(AgendamentoRepository agendamentoRepository,
-                              CompressorRepository compressorRepository) {
+            CompressorRepository compressorRepository) {
         this.agendamentoRepository = agendamentoRepository;
         this.compressorRepository = compressorRepository;
     }
 
-    @SuppressWarnings("null")
+    // ---------- CRUD PRINCIPAL (formato do MOBILE) ----------
+
     @Transactional
     public AgendamentoResponseDTO criar(AgendamentoRequestDTO dto) {
         Compressor compressor = compressorRepository.findById(dto.compressorId())
                 .orElseThrow(() -> new IllegalArgumentException("Compressor não encontrado"));
 
+        validarDto(dto);
+
         Agendamento ag = new Agendamento();
         ag.setCompressor(compressor);
-        ag.setComando(dto.comando());
-        ag.setRecorrencia(dto.recorrencia());
+        ag.setDiasSemana(dto.diasSemana());
+        ag.setHoraInicio(dto.horaInicio());
+        ag.setHoraFim(dto.horaFim());
+        ag.setAtivo(Boolean.TRUE.equals(dto.ativo()));
         ag.setDescricao(dto.descricao());
-        ag.setExecutado(false);
-        ag.setDataHoraExecucaoReal(null);
-
-        // valida e preenche conforme recorrência
-        switch (dto.recorrencia()) {
-            case UNICO -> configurarUnico(dto, ag);
-            case SEMANAL -> configurarSemanal(dto, ag);
-            case MENSAL -> configurarMensal(dto, ag);
-        }
 
         agendamentoRepository.save(ag);
-
         return toResponse(ag);
     }
 
-    private void configurarUnico(AgendamentoRequestDTO dto, Agendamento ag) {
-        if (dto.dataHoraExecucao() == null) {
-            throw new IllegalArgumentException("dataHoraExecucao é obrigatória para recorrencia UNICO");
-        }
-
-        LocalDateTime agora = LocalDateTime.now().minusSeconds(5);
-        if (dto.dataHoraExecucao().isBefore(agora)) {
-            throw new IllegalArgumentException("Data/hora de execução deve ser no presente ou futuro.");
-        }
-
-        ag.setDataHoraExecucao(dto.dataHoraExecucao());
-        ag.setDiaMes(null);
-        ag.setDiaSemana(null);
-        ag.setHoraExecucao(null);
-    }
-
-    private void configurarSemanal(AgendamentoRequestDTO dto, Agendamento ag) {
-        if (dto.diaSemana() == null || dto.horaExecucao() == null) {
-            throw new IllegalArgumentException("diaSemana e horaExecucao são obrigatórios para recorrencia SEMANAL");
-        }
-
-        ag.setDiaSemana(dto.diaSemana());
-        ag.setHoraExecucao(dto.horaExecucao());
-        ag.setDiaMes(null);
-        ag.setDataHoraExecucao(null);
-    }
-
-    private void configurarMensal(AgendamentoRequestDTO dto, Agendamento ag) {
-        if (dto.diaMes() == null || dto.horaExecucao() == null) {
-            throw new IllegalArgumentException("diaMes e horaExecucao são obrigatórios para recorrencia MENSAL");
-        }
-
-        if (dto.diaMes() < 1 || dto.diaMes() > 31) {
-            throw new IllegalArgumentException("diaMes deve estar entre 1 e 31");
-        }
-
-        ag.setDiaMes(dto.diaMes());
-        ag.setHoraExecucao(dto.horaExecucao());
-        ag.setDiaSemana(null);
-        ag.setDataHoraExecucao(null);
-    }
-
-    @SuppressWarnings("null")
     public AgendamentoResponseDTO buscarPorId(Integer id) {
         Agendamento ag = agendamentoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado"));
         return toResponse(ag);
     }
 
+    public List<AgendamentoResponseDTO> listar(Integer compressorId) {
+        List<Agendamento> lista;
+
+        if (compressorId != null) {
+            lista = agendamentoRepository.findByCompressorId(compressorId);
+        } else {
+            lista = agendamentoRepository.findAll();
+        }
+
+        return lista.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional
+    public void excluir(Integer id) {
+        if (!agendamentoRepository.existsById(id)) {
+            throw new IllegalArgumentException("Agendamento não encontrado");
+        }
+        agendamentoRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void excluirEmLote(List<Integer> ids) {
+        agendamentoRepository.deleteAllById(ids);
+    }
+
+    @Transactional
+    public AgendamentoResponseDTO alterarAtivo(Integer id, boolean ativo) {
+        Agendamento ag = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado"));
+        ag.setAtivo(ativo);
+        agendamentoRepository.save(ag);
+        return toResponse(ag);
+    }
+
+    @Transactional
+    public AgendamentoResponseDTO atualizar(Integer id, AgendamentoRequestDTO dto) {
+        Agendamento ag = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado"));
+
+        Compressor compressor = compressorRepository.findById(dto.compressorId())
+                .orElseThrow(() -> new IllegalArgumentException("Compressor não encontrado"));
+
+        validarDto(dto);
+
+        ag.setCompressor(compressor);
+        ag.setDiasSemana(dto.diasSemana());
+        ag.setHoraInicio(dto.horaInicio());
+        ag.setHoraFim(dto.horaFim());
+        ag.setAtivo(Boolean.TRUE.equals(dto.ativo()));
+        ag.setDescricao(dto.descricao());
+
+        // resetar controle do executor caso atualizado
+        ag.setUltimoDisparoInicio(null);
+        ag.setUltimoDisparoFim(null);
+
+        agendamentoRepository.save(ag);
+        return toResponse(ag);
+    }
+
+    // ---------- VALIDAÇÃO ----------
+
+    private void validarDto(AgendamentoRequestDTO dto) {
+        if (dto.diasSemana() == null || dto.diasSemana().isEmpty()) {
+            throw new IllegalArgumentException("Ao menos um dia da semana deve ser informado.");
+        }
+
+        LocalTime inicio = dto.horaInicio();
+        LocalTime fim = dto.horaFim();
+
+        if (inicio == null || fim == null) {
+            throw new IllegalArgumentException("horaInicio e horaFim são obrigatórios.");
+        }
+
+        if (!inicio.isBefore(fim)) {
+            throw new IllegalArgumentException("horaInicio deve ser antes de horaFim.");
+        }
+    }
+
+    // ---------- MAPEAMENTO ENTITY -> DTO ----------
+
     private AgendamentoResponseDTO toResponse(Agendamento ag) {
         return new AgendamentoResponseDTO(
                 ag.getId(),
                 ag.getCompressor().getId(),
-                ag.getComando(),
-                ag.getRecorrencia(),
-                ag.getDataHoraExecucao(),
-                ag.getDiaMes(),
-                ag.getDiaSemana(),
-                ag.getHoraExecucao(),
-                ag.getExecutado(),
-                ag.getDataHoraExecucaoReal(),
-                ag.getDescricao()
-        );
+                ag.getDiasSemana(),
+                ag.getHoraInicio(),
+                ag.getHoraFim(),
+                ag.getAtivo(),
+                ag.getDescricao());
     }
 }

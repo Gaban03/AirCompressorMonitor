@@ -3,8 +3,11 @@ package br.com.compress.comunica_compress.model;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,15 +27,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 @Table(name = "comando_agendado")
 public class Agendamento {
-
-    public enum Recorrencia {
-        UNICO,
-        SEMANAL,
-        MENSAL
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,28 +39,26 @@ public class Agendamento {
     @JoinColumn(name = "compressor_id", nullable = false)
     private Compressor compressor;
 
-    @Column(nullable = false)
-    private Boolean comando;
-
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "agendamento_dias_semana", joinColumns = @JoinColumn(name = "agendamento_id"))
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Recorrencia recorrencia;
+    @Column(name = "dia_semana", nullable = false)
+    private List<DayOfWeek> diasSemana;
 
-    // hora da execucao caso for UNICO
-    private LocalDateTime dataHoraExecucao;
+    @Column(name = "hora_inicio", nullable = false)
+    private LocalTime horaInicio;
 
-    private Integer diaMes;
-
-    @Enumerated(EnumType.STRING)
-    private DayOfWeek diaSemana;
-
-    // hora da execucao caso for SEMANAL ou MENSAL
-    private LocalTime horaExecucao;
+    @Column(name = "hora_fim", nullable = false)
+    private LocalTime horaFim;
 
     @Column(nullable = false)
-    private Boolean executado = false;
-
-    private LocalDateTime dataHoraExecucaoReal;
+    private Boolean ativo = true;
 
     private String descricao;
+
+    @Column(name = "ultimo_disparo_inicio")
+    private LocalDateTime ultimoDisparoInicio;
+
+    @Column(name = "ultimo_disparo_fim")
+    private LocalDateTime ultimoDisparoFim;
 }
