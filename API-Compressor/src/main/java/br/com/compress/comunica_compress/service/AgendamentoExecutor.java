@@ -25,7 +25,7 @@ public class AgendamentoExecutor {
         this.comandoService = comandoService;
     }
 
-    @Scheduled(cron = "0 * * * * *") // a cada 1 minuto no segundo 0
+    @Scheduled(cron = "0 * * * * *", zone = "America/Sao_Paulo") // a cada 1 minuto no segundo 0
     @Transactional
     public void executar() {
         LocalDateTime agoraDateTime = LocalDateTime.now().withSecond(0).withNano(0);
