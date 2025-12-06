@@ -27,7 +27,7 @@ public class ComandoService {
 
         Comando comando = new Comando();
         comando.setCompressor(compressor);
-        comando.setDataHora(LocalDateTime.now().minusHours(3));
+        comando.setDataHora(LocalDateTime.now());
         comando.setComando(comandoRequestDTO.comando());
 
         return comando;
