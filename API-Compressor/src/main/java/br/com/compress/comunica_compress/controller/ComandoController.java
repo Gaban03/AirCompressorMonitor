@@ -62,7 +62,7 @@ public class ComandoController {
                         return ResponseEntity.noContent().build();
                 }
 
-                LocalDateTime horarioAtual = LocalDateTime.now().minusHours(3);
+                LocalDateTime horarioAtual = LocalDateTime.now();
                 LocalDateTime horarioComando = latestComando.get().getDataHora();
 
                 Duration diff = Duration.between(horarioComando, horarioAtual);
