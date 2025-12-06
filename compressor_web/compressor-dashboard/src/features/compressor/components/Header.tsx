@@ -53,22 +53,17 @@ export function Header({ compressor, estado }: HeaderProps) {
   return (
     <div className="flex w-full items-center justify-center">
       <div className="flex flex-col items-center gap-3 text-center">
-        {/* Planta / local */}
-        <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-red-400/80">
-          {compressor?.senai ?? "SENAI"}
-        </p>
-
         {/* Título */}
-        <h1 className="text-3xl font-extrabold tracking-[0.35em] text-slate-50">
-          Compressor
+        <h1 className="text-[25px] font-extrabold tracking-[0.20em] text-slate-50">
+          COMPRESSOR METALPLAN 
         </h1>
 
         {/* Pills de status */}
-        <div className="mt-1 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-1 flex flex-wrap items-center justify-center gap-5">
           {/* Ligado / Desligado */}
           <div
             className={`
-              flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold
+              flex items-center gap-2 rounded-full px-5 py-1 text- font-semibold
               bg-gradient-to-r from-[#151515] to-[#050505]
               shadow-[0_0_14px_rgba(0,0,0,0.7)]
               ${ligadoClasses}
@@ -81,7 +76,7 @@ export function Header({ compressor, estado }: HeaderProps) {
           {/* Estado (Running, Alívio, etc) – sem neon */}
           <div
             className="
-              flex items-center gap-2 rounded-full px-4 py-1 text-xs font-semibold
+              flex items-center gap-2 rounded-full px-4 py-1 text- font-semibold
               bg-[#151515]
               border border-zinc-700
               shadow-[0_0_6px_rgba(0,0,0,0.7)]
