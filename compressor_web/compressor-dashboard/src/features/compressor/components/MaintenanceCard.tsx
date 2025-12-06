@@ -92,7 +92,7 @@ function calcularStatus(
       proxima: last,
       faltam: -atraso,
       label: `ALERTA: troca de ${item.nome} atrasada em ${atraso.toFixed(0)}h`,
-      colorClass: "text-red-400",
+      colorClass: "text-red-200",
       progressPercent: 100,
     };
   }
@@ -111,10 +111,10 @@ function calcularStatus(
     colorClass = "text-slate-100";
   } else if (faltam <= 100) {
     label = `Atenção: faltam ${faltam.toFixed(0)}h`;
-    colorClass = "text-slate-100"; 
+    colorClass = "text-slate-100";
   } else {
     label = `Faltam ${faltam.toFixed(0)}h`;
-    colorClass = "text-slate-100"; 
+    colorClass = "text-slate-100";
   }
 
 
@@ -138,8 +138,9 @@ export function MaintenanceCard({ horasTotais }: MaintenanceCardProps) {
         <p className="text-slate-400 text-sm">Carregando horas totais...</p>
       ) : (
         <div className="space-y-4">
-          {MAINTENANCE_ITEMS.map((item) => {
+          {MAINTENANCE_ITEMS.map((item, index) => {
             const status = calcularStatus(horasTotais, item);
+            const isLast = index === MAINTENANCE_ITEMS.length - 1;
 
             return (
               <div key={item.id} className="flex flex-col gap-1">
@@ -166,17 +167,22 @@ export function MaintenanceCard({ horasTotais }: MaintenanceCardProps) {
                   <div className="mt-1 h-2 w-full rounded-full bg-red-900/40 overflow-hidden">
                     <div
                       className={`
-                        h-2 rounded-full
-                        ${status.faltam !== null && status.faltam <= 0
+                      h-2 rounded-full
+                      ${status.faltam !== null && status.faltam <= 0
                           ? "bg-red-500"
                           : status.faltam !== null && status.faltam <= 100
                             ? "bg-amber-400"
                             : "bg-emerald-400"
                         }
-                      `}
+                    `}
                       style={{ width: `${status.progressPercent}%` }}
                     />
                   </div>
+                )}
+
+                {/* Linha separadora entre itens */}
+                {!isLast && (
+                  <div className="h-px w-full bg-red-500/20 my-1" />
                 )}
               </div>
             );

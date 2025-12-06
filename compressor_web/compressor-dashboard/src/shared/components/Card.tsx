@@ -17,7 +17,7 @@ export function Card({ title, children }: CardProps) {
         flex flex-col justify-between
       "
     >
-      <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.50em] text-red-400/85">
+      <div className="mb-2 text-[12px] font-semibold uppercase tracking-[0.50em] text-red-400/85">
         {title}
       </div>
 
