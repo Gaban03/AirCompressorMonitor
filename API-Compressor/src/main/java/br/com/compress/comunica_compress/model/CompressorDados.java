@@ -36,7 +36,7 @@ public class CompressorDados {
     private Integer id;
 
     @DateTimeFormat
-    private LocalDateTime dataHora = LocalDateTime.now().minusHours(3);
+    private LocalDateTime dataHora = LocalDateTime.now();
 
     @NotNull
     @Column(nullable = false)
@@ -82,5 +82,5 @@ public class CompressorDados {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "alerta_id_alerta")
-    private Alerta alerta;  
+    private Alerta alerta;
 }
