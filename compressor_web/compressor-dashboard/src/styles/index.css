@@ -7,5 +7,6 @@
 
 body {
   @apply bg-black text-slate-50 antialiased;
-  font-family: "Orbitron", sans-serif;
+    font-family: "Rajdhani", sans-serif;
+
 }

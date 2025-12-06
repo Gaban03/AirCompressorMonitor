@@ -46,17 +46,17 @@ const PRESSURE_SERIES = [
   {
     key: "pressaoArComprimido",
     label: "Pressão do ar",
-    color: "#fb923c",
+    color: "#f7a561ff",
   },
   {
     key: "pressaoCarga",
     label: "Pressão de carga",
-    color: "#f97316",
+    color: "#14dd93ff",
   },
   {
     key: "pressaoAlivio",
     label: "Pressão de alívio",
-    color: "#eab308",
+    color: "#ffd146ff",
   },
 ] as const;
 
@@ -130,18 +130,18 @@ export function HistoryChart({ dadosHistorico }: HistoryChartProps) {
       </div>
 
       {/* Gráfico */}
-      <div className="h-72 w-full">
+      <div className="h-[30rem] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
             <CartesianGrid stroke="#262626" strokeDasharray="3 3" />
             <XAxis
               dataKey="label"
               stroke="#e2e8f0"
-              tick={{ fontSize: 10, fill: "#e2e8f0" }}
+              tick={{ fontSize: 13, fill: "#e2e8f0" }}
             />
             <YAxis
               stroke="#e2e8f0"
-              tick={{ fontSize: 10, fill: "#e2e8f0" }}
+              tick={{ fontSize: 15, fill: "#e2e8f0" }}
             />
             <Tooltip
               contentStyle={{
@@ -154,6 +154,7 @@ export function HistoryChart({ dadosHistorico }: HistoryChartProps) {
             <Legend
               wrapperStyle={{
                 paddingTop: 8,
+                fontSize: 14
               }}
             />
 
