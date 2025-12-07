@@ -67,7 +67,7 @@ public class ComandoController {
 
                 Duration diff = Duration.between(horarioComando, horarioAtual);
 
-                if (Math.abs(diff.toMinutes()) > 5) {
+                if (Math.abs(diff.toMinutes()) > 2) {
                         return ResponseEntity.noContent().build();
                 }
 
