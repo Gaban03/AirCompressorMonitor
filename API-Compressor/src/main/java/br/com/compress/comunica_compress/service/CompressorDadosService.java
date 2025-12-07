@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.compress.comunica_compress.dto.CompressorDadosRequestDTO;
 import br.com.compress.comunica_compress.dto.CompressorDadosResponseDTO;
+import br.com.compress.comunica_compress.model.Alerta;
 import br.com.compress.comunica_compress.model.Compressor;
 import br.com.compress.comunica_compress.model.CompressorDados;
 import br.com.compress.comunica_compress.model.Falha;
@@ -36,7 +37,7 @@ public class CompressorDadosService {
     AlertaRepository alertaRepository;
 
     // DTO → Entity
-    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha) {
+    public CompressorDados toEntity(CompressorDadosRequestDTO dto, Compressor compressor, Falha falha, Alerta alerta) {
         CompressorDados entity = new CompressorDados();
         entity.setLigado(dto.ligado());
         entity.setEstado(dto.estado());
@@ -51,6 +52,8 @@ public class CompressorDadosService {
         entity.setPressaoAlivio(dto.pressaoAlivio());
         entity.setCompressor(compressor);
         entity.setFalha(falha);
+        entity.setAlerta(alerta);
+
         return entity;
     }
 
@@ -86,10 +89,21 @@ public class CompressorDadosService {
                 .orElseThrow(
                         () -> new IllegalArgumentException("Compressor de id: " + dto.compressorId() + "não existe!"));
 
-        Falha falha = falhaRepository.findById(dto.falhaId())
-                .orElseThrow(() -> new IllegalArgumentException("Falha " + dto.falhaId() + "não existe!"));
+        String alertaId = (dto.alertaId() == null || dto.alertaId().isBlank())
+                ? "0x00"
+                : dto.alertaId();
 
-        CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha);
+        String falhaId = (dto.falhaId() == null || dto.falhaId().isBlank())
+                ? "0x00"
+                : dto.falhaId();
+
+        Falha falha = falhaRepository.findById(falhaId)
+                .orElseThrow(() -> new IllegalArgumentException("Falha " + falhaId + " não existe!"));
+
+        Alerta alerta = alertaRepository.findById(alertaId)
+                .orElseThrow(() -> new IllegalArgumentException("Alerta " + alertaId + " não existe!"));
+
+        CompressorDados compressorDadosEntity = toEntity(dto, compressor, falha, alerta);
 
         if (compressorDadosEntity == null) {
             throw new IllegalStateException("Falha ao converter dados para entidade. Verifique os valores de entrada.");
@@ -116,7 +130,12 @@ public class CompressorDadosService {
                 Double.compare(compressorDadosEntity.getTemperaturaOrvalho(),
                         ultimosDados.get().getTemperaturaOrvalho()) == 0
                 &&
-                Objects.equals(compressorDadosEntity.getLigado(), ultimosDados.get().getLigado());
+                Objects.equals(compressorDadosEntity.getLigado(), ultimosDados.get().getLigado()
+                        &&
+                        Objects.equals(compressorDadosEntity.getFalha().getId(), ultimosDados.get().getFalha().getId())
+                        &&
+                        Objects.equals(compressorDadosEntity.getAlerta().getId(),
+                                ultimosDados.get().getAlerta().getId()));
 
         if (dadosSemAlteracao) {
             return null;
@@ -144,6 +163,6 @@ public class CompressorDadosService {
 
     @Transactional
     public Page<CompressorDados> buscarAlertas(Integer idCompressor, Pageable pageable) {
-        return compressorDadosRepository.findByCompressorIdAndAlertaIdNot(idCompressor, "", pageable);
+        return compressorDadosRepository.findByCompressorIdAndAlertaIdNot(idCompressor, "0x00", pageable);
     }
 }

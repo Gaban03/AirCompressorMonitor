@@ -2,9 +2,6 @@
 -- -----------------------------------------------------
 -- Schema compressor_db
 -- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema compressor_db
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `compressor_db` DEFAULT CHARACTER
 SET
   utf8;
@@ -85,14 +82,14 @@ CREATE TABLE
     `hora_total` FLOAT NULL,
     `pressao_carga` FLOAT NULL,
     `pressao_alivio` FLOAT NULL,
-    `falha_idFalha` VARCHAR(4) NULL,
+    `falha_id_falha` VARCHAR(4) NULL,
     `alerta_id_alerta` VARCHAR(4) NULL,
     `compressor_id` INT NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `idx_falha` (`falha_idFalha` ASC),
+    INDEX `idx_falha` (`falha_id_falha` ASC),
     INDEX `idx_alerta` (`alerta_id_alerta` ASC),
     INDEX `idx_compressor` (`compressor_id` ASC),
-    CONSTRAINT `fk_registro_falha` FOREIGN KEY (`falha_idFalha`) REFERENCES `compressor_db`.`falha` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT `fk_registro_falha` FOREIGN KEY (`falha_id_falha`) REFERENCES `compressor_db`.`falha` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `fk_registro_alerta` FOREIGN KEY (`alerta_id_alerta`) REFERENCES `compressor_db`.`alerta` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT `fk_registro_compressor` FOREIGN KEY (`compressor_id`) REFERENCES `compressor_db`.`compressor` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
   ) ENGINE = InnoDB;
