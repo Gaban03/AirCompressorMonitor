@@ -159,13 +159,17 @@ export function Header({ compressor, estado }: HeaderProps) {
         <div
           className="
             absolute right-0 top-1/2 translate-y-4 z-30
-            w-[420px] max-w-[90vw]
+            w-[620px] max-w-[120vw]
             rounded-2xl border border-red-600/60
             bg-gradient-to-br from-[#151515] via-[#050505] to-black
             p-5 shadow-[0_0_22px_rgba(0,0,0,0.9)]
           "
         >
-          <p className="mb-3 text-[15px] font-semibold uppercase tracking-[0.25em] text-red-400">
+          <h1 className="mb-3 text-[20px] font-semibold uppercase tracking-[0.25em] text-red-400">Sobre o Projeto</h1>
+          <p className="text-m text-slate-100 mb-10">Este sistema monitora em tempo real o compressor Metalplan, exibindo dados de operação, histórico, alertas e previsões de manutenção.
+            Também conta com um app mobile, permitindo acompanhar o compressor à distância e realizar liga/desliga ou agendamentos automáticos de operação.</p>
+
+          <p className="mb-3 text-[19x] font-semibold uppercase tracking-[0.25em] text-red-400">
             Desenvolvido por
           </p>
 
@@ -178,12 +182,12 @@ export function Header({ compressor, estado }: HeaderProps) {
                   px-4 py-4
                 "
               >
-                <div className="text-m font-semibold text-slate-100">{dev.nome}</div>
-                <div className="text-[14px] text-red-300">{dev.papel}</div>
-                <div className="mt-1 text-[13px] text-slate-400">{dev.email}</div>
+                <div className="text-lg font-semibold text-slate-100">{dev.nome}</div>
+                <div className="text-[18px] text-red-300">{dev.papel}</div>
+                <div className="mt-1 text-[17px] text-slate-400">{dev.email}</div>
 
                 {/* Ícones sociais — react-icons */}
-                <div className="mt-2 flex items-center gap-3 text-[13px] text-slate-300">
+                <div className="mt-2 flex items-center gap-3 text-[16px] text-slate-300">
 
                   {dev.github && (
                     <a
@@ -192,7 +196,7 @@ export function Header({ compressor, estado }: HeaderProps) {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-white transition"
                     >
-                      <FaGithub className="h-5 w-5" />
+                      <FaGithub className="h-6 w-6" />
                       <span>GitHub</span>
                     </a>
                   )}
@@ -204,7 +208,7 @@ export function Header({ compressor, estado }: HeaderProps) {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-white transition"
                     >
-                      <FaLinkedin className="h-5 w-5" />
+                      <FaLinkedin className="h-6 w-6" />
                       <span>LinkedIn</span>
                     </a>
                   )}
