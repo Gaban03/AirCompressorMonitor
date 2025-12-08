@@ -8,3 +8,4 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'compressor_service.dart';
 part 'service_locator.dart';
 part 'base_service.dart';
+part 'agendamento_service.dart';
