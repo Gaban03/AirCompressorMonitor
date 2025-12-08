@@ -39,6 +39,24 @@ class _CompressorFalhasViewState extends State<CompressorFalhasView> {
               );
             }
 
+            if (!vm.isLoading && vm.falhas.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 12),
+                    Text(
+                      "Nenhuma falha encontrada",
+                      style: GoogleFonts.orbitron(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
             return Column(
               children: [
                 Paginator(
@@ -49,7 +67,6 @@ class _CompressorFalhasViewState extends State<CompressorFalhasView> {
                   onFirst: vm.firstPage,
                   onLast: vm.lastPageCall,
                 ),
-
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () => vm.loadPage(vm.page),
