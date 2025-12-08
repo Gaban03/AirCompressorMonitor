@@ -26,7 +26,7 @@ const DEVELOPERS: Developer[] = [
   {
     nome: "Nicolas Moreira Ribeiro",
     papel: "IoT / Infraestrutura",
-    email: "nicolas@email.com",
+    email: "nicolas_ribeiro09@outlook.com",
     github: "https://github.com/NicolasRibe",
     linkedin:
       "https://www.linkedin.com/in/nicolas-moreira-ribeiro-37a139181/",
