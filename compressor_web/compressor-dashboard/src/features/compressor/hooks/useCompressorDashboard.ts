@@ -64,7 +64,7 @@ export function useCompressorDashboard() {
     // primeiro load
     loadAll();
     // pooling a cada 30s
-    const interval = setInterval(loadAll, 30000);
+    const interval = setInterval(loadAll, 5000);
     return () => clearInterval(interval);
   }, []);
 
