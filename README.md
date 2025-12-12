@@ -85,8 +85,6 @@ O sistema foi projetado para atender:
 
 | Integrante       | Função no Projeto        |
 |------------------|--------------------------|
-| Murilo           | Backend / API e Mobile / Flutter |           |
-| Nicolas          | Backend / API, Integração IoT / Node-RED e Líder     |
-| Pedro            |  Backend / API e Node-RED             |
-| Vinicius Ramos   | Backend / API e Integração IoT / Node-RED|
-| Vinicius Gaban   |  Web / Blazor, Gestão de Projeto e Mobile / Flutter       |
+| Murilo           | Backend / API e WEB|           |
+| Nicolas          | Backend / API, Integração IoT / Líder     |
+| Vinicius Gaban   |  Web / Gestão de Projeto e Mobile / Flutter       |
