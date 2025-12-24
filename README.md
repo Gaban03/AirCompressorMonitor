@@ -1,4 +1,6 @@
-# 📡 Air Compressor Monitor
+# 📡 Monitoramento de Compressor de Ar (Metalplan)
+
+## Air Compressor Monitor
 
 O **Air Compressor Monitor** é uma plataforma de **monitoramento e controle remoto de compressor de ar industrial**, desenvolvida como **Projeto Integrador** no curso de **Análise e Desenvolvimento de Sistemas (ADS)**, em parceria com a **Escola SENAI Antonio Adolpho Lobbe**.
 
