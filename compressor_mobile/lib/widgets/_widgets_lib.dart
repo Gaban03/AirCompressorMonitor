@@ -11,6 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/_models_lib.dart';
 import '../utils/_utils_lib.dart';
+import 'package:compressor_mobile/constants/_constants_lib.dart';
 
 part 'home_menu_item.dart';
 part 'stat_card.dart';
@@ -32,3 +33,9 @@ part 'side_menu_item.dart';
 part 'side_menu_footer.dart';
 part 'falha_card.dart';
 part 'paginator.dart';
+part 'time_field.dart';
+part 'agendamento_dia_chip.dart';
+part 'dia_seletor.dart';
+part 'agendamento_card.dart';
+part 'titulo_modal.dart';
+part 'agendamento_modal.dart';

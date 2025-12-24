@@ -34,6 +34,18 @@ class CompressorService extends BaseService {
       'compressor/falhas?idCompressor=$idCompressor&page=$page&size=$size',
     );
 
+    if (jsonData == null) {
+      return PageDTO(
+        content: [],
+        totalPages: 1,
+        totalElements: 0,
+        page: page,
+        size: size,
+        first: true,
+        last: true,
+      );
+    }
+
     return PageDTO.fromJson(
       jsonData,
       (json) => CompressorFalhasDto.fromJson(json),

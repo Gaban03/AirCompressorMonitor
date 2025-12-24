@@ -22,11 +22,16 @@ abstract class BaseService {
 
   BaseService({required this.baseUrl});
 
+  // ---------------------- GET ------------------------
   Future<dynamic> get(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.get(url, headers: defaultHeaders);
       _validateResponse(response);
+
+      if (response.statusCode == 204 || response.body.isEmpty) {
+        return null;
+      }
 
       return json.decode(response.body);
     } catch (e) {
@@ -35,8 +40,8 @@ abstract class BaseService {
     }
   }
 
-  Future<Map<String, dynamic>> post(
-      String endpoint, Map<String, dynamic> body) async {
+  // ---------------------- POST ------------------------
+  Future<dynamic> post(String endpoint, dynamic body) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.post(
@@ -44,7 +49,10 @@ abstract class BaseService {
         headers: defaultHeaders,
         body: json.encode(body),
       );
+
       _validateResponse(response);
+
+      if (response.body.isEmpty) return null;
       return json.decode(response.body);
     } catch (e) {
       _handleError(e);
@@ -52,8 +60,8 @@ abstract class BaseService {
     }
   }
 
-  Future<Map<String, dynamic>> put(
-      String endpoint, Map<String, dynamic> body) async {
+  // ---------------------- PUT ------------------------
+  Future<dynamic> put(String endpoint, dynamic body) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
       final response = await http.put(
@@ -61,7 +69,10 @@ abstract class BaseService {
         headers: defaultHeaders,
         body: json.encode(body),
       );
+
       _validateResponse(response);
+
+      if (response.body.isEmpty) return null;
       return json.decode(response.body);
     } catch (e) {
       _handleError(e);
@@ -69,17 +80,47 @@ abstract class BaseService {
     }
   }
 
-  Future<void> delete(String endpoint) async {
+  // ---------------------- PATCH ------------------------
+  Future<dynamic> patch(String endpoint, {dynamic body}) async {
     final url = Uri.parse('$baseUrl$endpoint');
     try {
-      final response = await http.delete(url, headers: defaultHeaders);
+      final response = await http.patch(
+        url,
+        headers: defaultHeaders,
+        body: body != null ? json.encode(body) : null,
+      );
+
       _validateResponse(response);
+
+      if (response.body.isEmpty) return null;
+      return json.decode(response.body);
     } catch (e) {
       _handleError(e);
       rethrow;
     }
   }
 
+  // ---------------------- DELETE ------------------------
+  Future<dynamic> delete(String endpoint, {dynamic body}) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    try {
+      final response = await http.delete(
+        url,
+        headers: defaultHeaders,
+        body: body != null ? json.encode(body) : null,
+      );
+
+      _validateResponse(response);
+
+      if (response.body.isEmpty) return null;
+      return json.decode(response.body);
+    } catch (e) {
+      _handleError(e);
+      rethrow;
+    }
+  }
+
+  // ---------------------- VALIDATION ------------------------
   void _validateResponse(http.Response response) {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw ApiException(
@@ -93,6 +134,7 @@ abstract class BaseService {
   void _handleError(Object e) {
     if (e is ApiException) {
       print('⚠️ [API ERROR]: ${e.statusCode} - ${e.message}');
+      if (e.details != null) print('➡️ DETAILS: ${e.details}');
     } else {
       print('❌ [API ERROR]: $e');
     }

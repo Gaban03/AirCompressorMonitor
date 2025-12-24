@@ -17,5 +17,12 @@ Future<void> setupLocator() async {
   getIt.registerLazySingleton<CompressorService>(
     () => CompressorService(baseUrl: baseUrl),
   );
-}
 
+  if (getIt.isRegistered<AgendamentoService>()) {
+    getIt.unregister<AgendamentoService>();
+  }
+
+  getIt.registerLazySingleton<AgendamentoService>(
+    () => AgendamentoService(baseUrl: baseUrl),
+  );
+}
